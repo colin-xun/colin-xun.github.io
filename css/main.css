@@ -1944,7 +1944,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #ff37ff;
+  background: #66b0b5;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2912,6 +2912,9 @@ hr {
 .posts-expand .post-title:hover:before {
   background: #222;
 }
+.posts-expand .post-body {
+  text-align: left;
+}
 @media (max-width: 767px) {
   .posts-expand .post-body {
     font-size: 12px;
@@ -3004,7 +3007,7 @@ hr {
 @media (max-width: 767px) {
   .pagination {
     margin: 80px 10px 0;
-    text-align: center;
+    text-align: left;
   }
 }
 .footer {
