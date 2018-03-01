@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-03-01T10:10:02.000Z</updated>
+  <updated>2018-03-01T10:30:46.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,16 +17,32 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>test2</title>
-    <link href="http://yoursite.com/2018/03/01/test2/"/>
-    <id>http://yoursite.com/2018/03/01/test2/</id>
-    <published>2018-03-01T10:10:02.000Z</published>
-    <updated>2018-03-01T10:10:02.000Z</updated>
+    <title>String之intern详解</title>
+    <link href="http://yoursite.com/2018/03/01/String%E4%B9%8Bintern%E8%AF%A6%E8%A7%A3/"/>
+    <id>http://yoursite.com/2018/03/01/String之intern详解/</id>
+    <published>2018-03-01T10:20:05.000Z</published>
+    <updated>2018-03-01T10:30:46.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>java中的Perm Space在1.7中被移除了，首先要知道一点就是java的内存模型中有一个叫String poll的区域，这个区域存放String的值<br>未完待续。。。</p>]]></content>
     
     <summary type="html">
     
+      
+      
+        &lt;p&gt;java中的Perm Space在1.7中被移除了，首先要知道一点就是java的内存模型中有一个叫String poll的区域，这个区域存放String的值&lt;br&gt;未完待续。。。&lt;/p&gt;
+
+      
+    
     </summary>
     
+      <category term="java基础" scheme="http://yoursite.com/categories/java%E5%9F%BA%E7%A1%80/"/>
+    
+    
+      <category term="java" scheme="http://yoursite.com/tags/java/"/>
+    
+      <category term="面试" scheme="http://yoursite.com/tags/%E9%9D%A2%E8%AF%95/"/>
+    
+      <category term="基础" scheme="http://yoursite.com/tags/%E5%9F%BA%E7%A1%80/"/>
     
   </entry>
   
