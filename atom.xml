@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-03-01T10:30:46.000Z</updated>
+  <updated>2018-03-04T03:38:03.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,20 +17,22 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>String之intern详解</title>
-    <link href="http://yoursite.com/2018/03/01/String%E4%B9%8Bintern%E8%AF%A6%E8%A7%A3/"/>
-    <id>http://yoursite.com/2018/03/01/String之intern详解/</id>
-    <published>2018-03-01T10:20:05.000Z</published>
-    <updated>2018-03-01T10:30:46.000Z</updated>
+    <title>String之intern函数</title>
+    <link href="http://yoursite.com/2018/03/04/String%E4%B9%8Bintern%E5%87%BD%E6%95%B0/"/>
+    <id>http://yoursite.com/2018/03/04/String之intern函数/</id>
+    <published>2018-03-04T03:36:18.000Z</published>
+    <updated>2018-03-04T03:38:03.000Z</updated>
     
-    <content type="html"><![CDATA[<p>java中的Perm Space在1.7中被移除了，首先要知道一点就是java的内存模型中有一个叫String poll的区域，这个区域存放String的值<br>未完待续。。。</p>]]></content>
+    <content type="html"><![CDATA[<p>在讲解正式内容前，先来看看JVM的内存模型，以及1.6和1.7还有1.8的内存模型有什么不同。</p><img src="/2018/03/04/String之intern函数/1.png" title="JVM内存图"><blockquote><p>虚拟机栈里面存放的就是一个一个的栈帧（栈帧是用来存储数据和存储部分过程结果的数据结构），而且只有一个活跃的栈帧，也就是栈顶元素</p><p>本地方法栈根据名字就知道他是为本地方法服务的（本地方法只是用java语言定义了，但是具体实现可能就是别的语言了）,他里面存放的就是本地方法帧，用于调用执行本地方法</p><p>程序计数器里面存放的内容可以理解为当前字节码的执行地址，用以完成分支，循环，跳转，异常处理，线程恢复等基础功能</p><p>堆内存：图1所画的是1.6时候的，这时堆中还只有新生代和老年代，新生代占1/3，老年代占2/3，Eden占新生代的8/10（所以新生代实际有效空间为9/10）</p><p>方法区：方法区是堆的逻辑组成部分，用来存放类的基础信息，可以分为以下几类，运行时常量，域信息，方法信息，静态变量等信息。</p></blockquote><p>同时通过上面的图我们可以看到：虚拟机栈，本地方法栈，程序计数器都是线程私有的，而堆和方法区是线程共有的。</p><hr><p>在1.6中PermGen（永久代）存放在方法区中<br>在1.7中PermGen（永久代）中的符号引用(Symbols)转移到了native heap；字面量(interned strings)转移到了java heap；类的静态变量(class statics)转移到了java heap。<br>在1.8中方法区已经没有了，出来了一个Metaspace（元空间），其实和永久代一样，都是对方法区的实现，但是元空间已经不在JVM虚拟机里面了，而是在虚拟机外面的内存空间</p><blockquote><p>那么为什么要移除方法区呢？个人认为是方法区是在启动时确认的，这样会照成内存溢出，而且永久代的回收实现相对比较麻烦</p></blockquote><hr><p>终于可以讲正式内容了</p><p>首先看一段代码</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">       String s1 = <span class="keyword">new</span> String(<span class="string">"1"</span>);</span><br><span class="line">       s1.intern();</span><br><span class="line">       String s2 = <span class="string">"1"</span>;</span><br><span class="line">       System.out.println(s1 == s2);</span><br><span class="line"></span><br><span class="line">       String s3 = <span class="keyword">new</span> String(<span class="string">"1"</span>) + <span class="keyword">new</span> String(<span class="string">"1"</span>);</span><br><span class="line">       s3.intern();</span><br><span class="line">       String s4 = <span class="string">"11"</span>;</span><br><span class="line">       System.out.println(s3 == s4);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure><p>输出结果为：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">jdk6 下<span class="keyword">false</span> <span class="keyword">false</span></span><br><span class="line">jdk7 下<span class="keyword">false</span> <span class="keyword">true</span></span><br><span class="line">jdk8 下<span class="keyword">false</span> <span class="keyword">true</span></span><br></pre></td></tr></table></figure><img src="/2018/03/04/String之intern函数/2.png" title="1.6内存图"><blockquote><p>第一行，new String（“1”）会现在String常量池里面创建一个1的常量，然后在堆里面创建一个String对象，内容指向常量池中的1，然后s1只想堆中对象</p><p>第二行，s1.intern的作用的去常量池里面查看有没有1这个变量，如果没有的话创建</p><p>第三行String s2 = “1”这种创建方法，会直接让s2指向常量池中的1</p><p>第四行，因为s1指向的是堆中地址，s2指向的是常量池中地址，所以肯定为false</p><p>第五行首先和第一行一样，创建两个匿名对象，然后在堆内存中创建一个String对象，对象的值为11，然后让s3指向这个对象</p><p>第六行，查看常量池没有11，创建，并让堆中对象指向该地址</p><p>第七行，s4指向常量池中11</p><p>第八行，因为s3指向的是堆中地址，s4指向的是常量池中地址，所以为false</p></blockquote><p>那么为什么1.7和1.8输出为true呢？这就是内存模型改变照成的</p><img src="/2018/03/04/String之intern函数/3.png" title="1.7内存图"><blockquote><p>注意看箭头指向</p><p>前面已经说过，在1.6以后，已经把一部分内容移动到了heap中，而String poll就放到了堆中，那么既然都在堆中，没必要创建两份对象吧？</p><p>所以第六行的改变就变成了，查看String poll中没有11这个变量，然后就在常量池中开辟一片空间，然后让他指向堆内存的对象（这样一个堆里面，同样的对象只存在一个，别的都是引用）</p><p>所以第八行就成了，s3的值为堆中地址，s4也为堆中地址，所以为true</p></blockquote>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;p&gt;java中的Perm Space在1.7中被移除了，首先要知道一点就是java的内存模型中有一个叫String poll的区域，这个区域存放String的值&lt;br&gt;未完待续。。。&lt;/p&gt;
-
+        &lt;p&gt;在讲解正式内容前，先来看看JVM的内存模型，以及1.6和1.7还有1.8的内存模型有什么不同。&lt;/p&gt;
+&lt;img src=&quot;/2018/03/04/String之intern函数/1.png&quot; title=&quot;JVM内存图&quot;&gt;
+&lt;blockquote&gt;
+&lt;p&gt;虚拟机栈里面存放
       
     
     </summary>
