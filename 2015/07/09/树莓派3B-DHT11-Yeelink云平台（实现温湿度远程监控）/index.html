@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="java,基础,面试," />
+  <meta name="keywords" content="树莓派,温湿度传感器," />
 
 
 
@@ -81,20 +81,18 @@
 
 
 
-<meta name="description" content="这是一道面试题之前被问到过，但是过后也没好好想想，今天有朋友问到这个，查过资料以后总结下先看一段代码：">
-<meta name="keywords" content="java,基础,面试">
+<meta name="description" content="因为毕业设计选了个让自己一脸懵逼的题目，听同学说树莓派实现比较简单，所以我就花了4百大洋买了一个3B的板子和一个树莓派原装的摄像头（一百五左右，最后发现网上资料太少了!😭，而且只是搞下毕业设计，就不打算深究了，网上找个例子实现功能就可以了，不过拍的确实清晰）。好了，下面就说下怎么实现云平台实时监控温湿度把。其中有投机取巧的部分。其实我说的所有都只是一种方法，大家可以去尝试别的，下面就不赘述了，直">
+<meta name="keywords" content="树莓派,温湿度传感器">
 <meta property="og:type" content="article">
-<meta property="og:title" content="java值传递和引用传递">
-<meta property="og:url" content="http://yoursite.com/2018/01/23/java值传递和引用传递/index.html">
+<meta property="og:title" content="树莓派3B-DHT11-Yeelink云平台（实现温湿度远程监控）">
+<meta property="og:url" content="http://yoursite.com/2015/07/09/树莓派3B-DHT11-Yeelink云平台（实现温湿度远程监控）/index.html">
 <meta property="og:site_name" content="天秤座">
-<meta property="og:description" content="这是一道面试题之前被问到过，但是过后也没好好想想，今天有朋友问到这个，查过资料以后总结下先看一段代码：">
+<meta property="og:description" content="因为毕业设计选了个让自己一脸懵逼的题目，听同学说树莓派实现比较简单，所以我就花了4百大洋买了一个3B的板子和一个树莓派原装的摄像头（一百五左右，最后发现网上资料太少了!😭，而且只是搞下毕业设计，就不打算深究了，网上找个例子实现功能就可以了，不过拍的确实清晰）。好了，下面就说下怎么实现云平台实时监控温湿度把。其中有投机取巧的部分。其实我说的所有都只是一种方法，大家可以去尝试别的，下面就不赘述了，直">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2018/01/23/java值传递和引用传递/1.png">
-<meta property="og:updated_time" content="2018-01-23T07:08:00.000Z">
+<meta property="og:updated_time" content="2018-03-05T03:17:38.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="java值传递和引用传递">
-<meta name="twitter:description" content="这是一道面试题之前被问到过，但是过后也没好好想想，今天有朋友问到这个，查过资料以后总结下先看一段代码：">
-<meta name="twitter:image" content="http://yoursite.com/2018/01/23/java值传递和引用传递/1.png">
+<meta name="twitter:title" content="树莓派3B-DHT11-Yeelink云平台（实现温湿度远程监控）">
+<meta name="twitter:description" content="因为毕业设计选了个让自己一脸懵逼的题目，听同学说树莓派实现比较简单，所以我就花了4百大洋买了一个3B的板子和一个树莓派原装的摄像头（一百五左右，最后发现网上资料太少了!😭，而且只是搞下毕业设计，就不打算深究了，网上找个例子实现功能就可以了，不过拍的确实清晰）。好了，下面就说下怎么实现云平台实时监控温湿度把。其中有投机取巧的部分。其实我说的所有都只是一种方法，大家可以去尝试别的，下面就不赘述了，直">
 
 
 
@@ -124,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/01/23/java值传递和引用传递/"/>
+  <link rel="canonical" href="http://yoursite.com/2015/07/09/树莓派3B-DHT11-Yeelink云平台（实现温湿度远程监控）/"/>
 
 
 
 
 
-  <title>java值传递和引用传递 | 天秤座</title>
+  <title>树莓派3B-DHT11-Yeelink云平台（实现温湿度远程监控） | 天秤座</title>
   
 
 
@@ -267,7 +265,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/23/java值传递和引用传递/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/07/09/树莓派3B-DHT11-Yeelink云平台（实现温湿度远程监控）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="colin">
@@ -284,7 +282,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">java值传递和引用传递</h1>
+          <h1 class="post-title" itemprop="name headline">树莓派3B-DHT11-Yeelink云平台（实现温湿度远程监控）</h1>
         
 
         <div class="post-meta">
@@ -296,8 +294,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-23T14:09:58+08:00">
-                2018-01-23
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-07-09T10:37:46+08:00">
+                2015-07-09
               </time>
             
 
@@ -319,8 +317,30 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java基础/" itemprop="url" rel="index">
-                    <span itemprop="name">java基础</span>
+                  <a href="/categories/嵌入式/" itemprop="url" rel="index">
+                    <span itemprop="name">嵌入式</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/嵌入式/c/" itemprop="url" rel="index">
+                    <span itemprop="name">c</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/嵌入式/c/毕业设计/" itemprop="url" rel="index">
+                    <span itemprop="name">毕业设计</span>
                   </a>
                 </span>
 
@@ -356,13 +376,46 @@
       
 
       
-        <p>这是一道面试题<br>之前被问到过，但是过后也没好好想想，今天有朋友问到这个，查过资料以后总结下<br>先看一段代码：<br><a id="more"></a><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String str = <span class="string">"A"</span>;  </span><br><span class="line">        change(str);</span><br><span class="line">        System.out.println(str);</span><br><span class="line">        </span><br><span class="line">        Integer i = <span class="keyword">new</span> Integer(<span class="number">10</span>);</span><br><span class="line">        changeb(i);</span><br><span class="line">        System.out.println(i);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> j = <span class="number">10</span>;</span><br><span class="line">        changed(j);</span><br><span class="line">        System.out.println(j);</span><br><span class="line">        </span><br><span class="line">        Stu stu = <span class="keyword">new</span> Stu(<span class="string">"colin"</span>);</span><br><span class="line">        changec(stu);</span><br><span class="line">        System.out.println(stu);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">changed</span><span class="params">(Integer j)</span> </span>&#123;</span><br><span class="line">        j = <span class="number">20</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">changec</span><span class="params">(Stu stu)</span> </span>&#123;</span><br><span class="line">        stu.name = <span class="string">"libra"</span>;</span><br><span class="line"><span class="comment">//        stu = new Stu("libra");</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">changeb</span><span class="params">(Integer i)</span> </span>&#123;</span><br><span class="line">        i = <span class="keyword">new</span> Integer(<span class="number">20</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">change</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">        str = <span class="string">"B"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Stu</span> </span>&#123;</span><br><span class="line">    String name;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Stu</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Stu&#123;"</span> +</span><br><span class="line">                <span class="string">"name='"</span> + name + <span class="string">'\''</span> +</span><br><span class="line">                <span class="string">'&#125;'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p></p><h5>结果</h5><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">A</span><br><span class="line"><span class="number">10</span></span><br><span class="line"><span class="number">10</span></span><br><span class="line">Stu&#123;name=<span class="string">'wtx'</span>&#125;</span><br></pre></td></tr></table></figure><p></p>
-<p></p><h5>个人理解：</h5><br>java中传递方式分为值传递和引用传递<br>值传递：基本类型(byte–short–int–long–float–double–boolean–char)<br>引用传递：类类型，接口类型，数组<p></p>
-<p></p><h6>例子一：String</h6><br><img src="/2018/01/23/java值传递和引用传递/1.png" title="java内存图"><br>String是在常量池中的，这些无所谓，有所谓的是引用传递传递的是地址，A的地址是0x1101现在把0x1101传递过去，让实参str接受，这时候str也指向了0x1101，这时候修改实参str的指向，只是修改了实参的指向，没有修改外面str的指向，所有输出为A<p></p>
-<p></p><h6>例子二：Integer，Double包装类</h6><br>这些包装类里面没有修改值的操作，而且是final类型的，所以我们修改值的时候不是在原来的基础上修改，所以输出10<p></p>
-<p></p><h6>例子三：基本类型</h6><br>基本类型就是值传递，不涉及引用，不修改外面值<p></p>
-<p></p><h6>例子四：修改对象值</h6><br>对于例子四，如果使用第一行代码的话，我们是在原对象中修改，故会改变外面的值，但是如果我们是用第二种，那只是改变了内部引用，不影响外面值的变化<p></p>
+        <p>因为毕业设计选了个让自己一脸懵逼的题目，听同学说树莓派实现比较简单，所以我就花了4百大洋买了一个3B的板子和一个树莓派原装的摄像头（一百五左右，最后发现网上资料太少了!😭，而且只是搞下毕业设计，就不打算深究了，网上找个例子实现功能就可以了，不过拍的确实清晰）。好了，下面就说下怎么实现云平台实时监控温湿度把。其中有投机取巧的部分。其实我说的所有都只是一种方法，大家可以去尝试别的，下面就不赘述了，直接写过程。</p>
+<ul>
+<li>装系统</li>
+</ul>
+<p>装系统的话，直接去官网下载就行，毕竟用的树莓派，我就下了raspbian，带桌面（毕竟小白）这是下载链接<a href="https://downloads.raspberrypi.org/raspbian_latest" target="_blank" rel="noopener">https://downloads.raspberrypi.org/raspbian_latest</a></p>
+<p>同时需要一个写入工具，我当时应该不是在官网下的，这是链接，速度挺快，下载完解压就行<a href="http://124.202.164.7/files/4125000005975BAB/vzidc.newhua.com/down/Win32DiskImager-0.9.5-binary.zip" target="_blank" rel="noopener">http://124.202.164.7/files/4125000005975BAB/vzidc.newhua.com/down/Win32DiskImager-0.9.5-binary.zip</a></p>
+<p>然后需要一张4g以上的sd卡，反正我用的8g，我用的就是很早以前手机里的内存卡，同时需要一个读卡器，打开读写工具，然后把解压后的img系统文件写入到内存卡，就可以了</p>
+<ul>
+<li>登录树莓派</li>
+</ul>
+<p>第一次登录用ssh工具，首先你需要知道局域网给你的树莓派分配的IP地址，可以使用一个端口扫描工具，看看哪儿22端口是开放的，然后xshell链接</p>
+<ul>
+<li>显示图形界面</li>
+</ul>
+<p>我也不先配置别的了，先让大家看看图形界面吧，上vncviewer下载客户端，然后在xshell输入sudo apt-get install tightvncserver然后等读码完成，然后输入vncserver，接下来它让你设置密码，我设置12345678，然后确认再输入一次，接着打开vncviewer，在地址栏输入树莓派ip:1回车，然后输入12345678，回车就可以看到图形界面了</p>
+<ul>
+<li>树莓派连接上无线网路</li>
+</ul>
+<p>因为树莓派没有自带vim，所以我就先安装了vim，命令式sudo apt-get install vim</p>
+<p>然后sudo vim /etc/network/interfaces 然后修改成下列样式</p>
+<pre><code>auto lo
+iface loinet loopback
+ifaceeth0 inet dhcp
+autowlan0
+allow-hotplugwlan0
+ifacewlan0 inet dhcp
+      wpa-ssid 要连入的WiFi名
+      wpa-psk WiFi密码
+</code></pre><p>然后sudo /etc/init.d/networking restart 但是这时候会分配一个新的ip，然后xshell创建一个新的连接就行了</p>
+<p>修改配置</p>
+<p>这是树莓派3B的界面，别的修改项含义可以参考</p>
+<p><a href="http://blog.csdn.net/xdw1985829/article/details/38816375" target="_blank" rel="noopener">http://blog.csdn.net/xdw1985829/article/details/38816375</a></p>
+<p>，我修改了第一项，让文件系统覆盖整个sd卡，同时修改了时区，如果不修改时区的话，接下来上传的数据时间不正确</p>
+<p>安装WiringPi</p>
+<p>sudo apt-get install wiringPi 安装完可以测试一下gpio readall然后会显示一些东西就证明可以了</p>
+<p>接下来就是程序和怎么连接到yeelink上了</p>
+<p>下载我整理好的程序，test.c是源文件可以使用gcc编译一下，编译命令式gcc –Wall –o 输出的文件名  编译的文件名 –lwiringPi 然后生成一个你要生成的文件名</p>
+<p>接下来修改shell脚本,Yeelink教程网上很多，我就不介绍了，得到两个传感器的URL就行，还有你的API key，替换成你的API key和URL，同时还有你编译.c生成的文件的路径</p>
+<p>这是我写的，有点投机取巧✌️，勉强能用。</p>
+<p>链接：<a href="http://pan.baidu.com/s/1nuXLmAl" target="_blank" rel="noopener">http://pan.baidu.com/s/1nuXLmAl</a> 密码：yjvq</p>
 
       
     </div>
@@ -409,11 +462,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/java/" rel="tag"># java</a>
+            <a href="/tags/树莓派/" rel="tag"># 树莓派</a>
           
-            <a href="/tags/基础/" rel="tag"># 基础</a>
-          
-            <a href="/tags/面试/" rel="tag"># 面试</a>
+            <a href="/tags/温湿度传感器/" rel="tag"># 温湿度传感器</a>
           
         </div>
       
@@ -426,8 +477,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/07/09/树莓派3B-DHT11-Yeelink云平台（实现温湿度远程监控）/" rel="next" title="树莓派3B-DHT11-Yeelink云平台（实现温湿度远程监控）">
-                <i class="fa fa-chevron-left"></i> 树莓派3B-DHT11-Yeelink云平台（实现温湿度远程监控）
+              <a href="/2015/02/07/java之char数组输出/" rel="next" title="java之char数组输出">
+                <i class="fa fa-chevron-left"></i> java之char数组输出
               </a>
             
           </div>
@@ -436,8 +487,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/03/04/String之intern函数/" rel="prev" title="String之intern函数">
-                String之intern函数 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/01/23/java值传递和引用传递/" rel="prev" title="java值传递和引用传递">
+                java值传递和引用传递 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -490,17 +541,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -589,22 +631,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">结果</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">个人理解：</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#undefined"><span class="nav-number">2.1.</span> <span class="nav-text">例子一：String</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#undefined"><span class="nav-number">2.2.</span> <span class="nav-text">例子二：Integer，Double包装类</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#undefined"><span class="nav-number">2.3.</span> <span class="nav-text">例子三：基本类型</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#undefined"><span class="nav-number">2.4.</span> <span class="nav-text">例子四：修改对象值</span></a></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
