@@ -1,0 +1,23 @@
+---
+title: 关于
+date: 2018-01-19 16:43:33
+---
+If you missed the train I'm on
+You will know that I am gone
+You can hear the whistle blow a hundred miles
+A hundred miles, a hundred miles,
+A hundred miles, a hundred miles
+You can hear the whistle blow a hundred miles
+Lord, I'm one, Lord, I'm two,
+Lord, I'm three, Lord, I'm four
+Lord, I'm five hundred miles away from home
+Away from home, away from home,
+Away from home, away from home
+Lord, I'm five hundred miles away from home
+Not a shirt on my back
+Not a penny to my name
+Lord, I can't go back home this ole way
+This ole way, this ole way,
+This ole way, this ole way,
+Lord, I can't go back home this this ole way
+If you…
