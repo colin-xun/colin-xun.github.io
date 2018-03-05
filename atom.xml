@@ -42,9 +42,9 @@
     
       <category term="java" scheme="http://yoursite.com/tags/java/"/>
     
-      <category term="基础" scheme="http://yoursite.com/tags/%E5%9F%BA%E7%A1%80/"/>
-    
       <category term="面试" scheme="http://yoursite.com/tags/%E9%9D%A2%E8%AF%95/"/>
+    
+      <category term="基础" scheme="http://yoursite.com/tags/%E5%9F%BA%E7%A1%80/"/>
     
   </entry>
   
@@ -68,9 +68,47 @@
     
       <category term="java" scheme="http://yoursite.com/tags/java/"/>
     
+      <category term="面试" scheme="http://yoursite.com/tags/%E9%9D%A2%E8%AF%95/"/>
+    
       <category term="基础" scheme="http://yoursite.com/tags/%E5%9F%BA%E7%A1%80/"/>
     
-      <category term="面试" scheme="http://yoursite.com/tags/%E9%9D%A2%E8%AF%95/"/>
+  </entry>
+  
+  <entry>
+    <title>自定义线程池（一）</title>
+    <link href="http://yoursite.com/2017/12/09/%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BA%BF%E7%A8%8B%E6%B1%A0%EF%BC%88%E4%B8%80%EF%BC%89/"/>
+    <id>http://yoursite.com/2017/12/09/自定义线程池（一）/</id>
+    <published>2017-12-09T08:17:23.000Z</published>
+    <updated>2018-03-05T08:23:47.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>在我们自定义线程池之前，先预备一点前置知识</p><ul><li>为什么要使用线程池？</li></ul><ol><li>New Thread这种方式性能差</li><li>缺乏统一管理，循环创建会照成OOM</li><li>功能单一</li></ol><p>对应的就是线程池的优点，JAVA1.5出来的Concurrent包里面提供了四种创建线程池的方法，我们可以直接创建，但阿里Java开发手册有这么一条</p><blockquote><p>【强制】线程池不允许使用 Executors 去创建，而是通过ThreadPoolExecutor 的方式</p></blockquote><p>这样的好处就强制开发者去了解线程池的创建原理，从而避免资源耗尽的风险，而且Executors中四种线程池创建方式其实都依赖于ThreadPollExecutor这个类的构造。</p><ul><li>线程池概念</li></ul><img src="/2017/12/09/自定义线程池（一）/1.png" title="关系图"><p>从图中可以看到各个类和接口的关系，同时可以看到Executors和其他类或接口没有什么直接关系，我们可以把他当成一个线程池工厂，用来创建四种线程池。</p><p>先说下ThreadPoolExecutor</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">int</span> maximumPoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">long</span> keepAliveTime,</span></span></span><br><span class="line"><span class="function"><span class="params">        TimeUnit unit,</span></span></span><br><span class="line"><span class="function"><span class="params">        BlockingQueue&lt;Runnable&gt; workQueue,</span></span></span><br><span class="line"><span class="function"><span class="params">        ThreadFactory threadFactory,</span></span></span><br><span class="line"><span class="function"><span class="params">        RejectedExecutionHandler handler)</span></span></span><br></pre></td></tr></table></figure><blockquote><p>corePoolSize：核心线程数大小</p><p>maximumPoolSize：线程池最大线程数</p><p>keepAliveTime：当线程数大于核心时，清除空闲keepAliveTime时间的线程</p><p>unit：时间单位</p><p>workQueue：存储等待任务的队列</p><p>threadFactory：线程工厂</p><p>handler：拒绝策略</p></blockquote><p>刚创建的线程池是没有任何线程的，当过来一个任务，就启动一个线程去执行，当线程池达到核心线程数的话，就把新加进来的任务放到阻塞队列，如果阻塞队列是有边界的话，到达边界以后就会去创建新的线程，接下来就会出现两种情况：</p><ol><li>如果任务不再来了，那么就会把空闲keepAliveTime时间的线程给移除掉</li><li>如果任务接着来，并且已经达到了最大线程数，那么就要执行拒绝策略了</li></ol><p>其中等待队列有多种ArrayBlockingQueue，LinkedBlockingQueue，LinkedBlockingDeque，SynchronousQueue，根据具体情况而定。</p><p>拒绝策略也有很多种</p><ol><li>AbortPolicy：丢弃任务并抛出RejectedExecutionException异常。 (默认)</li><li>DiscardPolicy：也是丢弃任务，但是不抛出异常。</li><li>DiscardOldestPolicy：丢弃队列最前面的任务，然后重新尝试执行任务（重复此过程）</li><li>CallerRunsPolicy：由调用线程处理该任务</li></ol><ul><li>四种创建线程池的方法</li></ul><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newSingleThreadExecutor</span><span class="params">()</span> </span>&#123;</span><br><span class="line"><span class="keyword">return</span> <span class="keyword">new</span> FinalizableDelegatedExecutorService</span><br><span class="line">    (<span class="keyword">new</span> ThreadPoolExecutor(</span><br><span class="line">            <span class="number">1</span>, <span class="number">1</span>,</span><br><span class="line">        <span class="number">0L</span>, TimeUnit.MILLISECONDS,</span><br><span class="line">                <span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;()));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><blockquote><p>创建一个单线程，你看名字里面都没有ThreadPool:smile:，如果这个线程死了，他会创建一个新的线程来替代。</p></blockquote><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newCachedThreadPool</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ThreadPoolExecutor(</span><br><span class="line">                <span class="number">0</span>, Integer.MAX_VALUE,</span><br><span class="line">                <span class="number">60L</span>, TimeUnit.SECONDS,</span><br><span class="line">                <span class="keyword">new</span> SynchronousQueue&lt;Runnable&gt;());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><blockquote><p>这个线程的特点从等待队列就可以看出来，这个队列根本不存储数据，只是做一个通道，一边进一边出。最大线程数为Integer.MAX_VALUE,也就是过来一个任务我就创建一个线程，当线程数大于任务数的时候就去回收那些空闲超过60秒的线程。</p></blockquote><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newFixedThreadPool</span><span class="params">(<span class="keyword">int</span> nThreads)</span> </span>&#123;</span><br><span class="line"><span class="keyword">return</span> <span class="keyword">new</span> ThreadPoolExecutor(</span><br><span class="line">        nThreads, nThreads,</span><br><span class="line">    <span class="number">0L</span>, TimeUnit.MILLISECONDS,</span><br><span class="line">            <span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><blockquote><p>这个线程池核心线程和最大线程数相等，也就是说，过来一个任务，就直接创建一个线程，等到了最大线程数，你看keepAliveTime为0，所以就是不管线程使用不适用都不回收，如果线程挂了的话会重新创建一个。为了不然频繁丢弃任务，这里使用了一个无界链表队列。</p></blockquote><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ScheduledThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize)</span> </span>&#123;</span><br><span class="line"><span class="keyword">super</span>(</span><br><span class="line">          corePoolSize, Integer.MAX_VALUE,</span><br><span class="line">          <span class="number">0</span>, NANOSECONDS,</span><br><span class="line">      <span class="keyword">new</span> DelayedWorkQueue());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><blockquote><p>这个线程池的特点从名字就可以看出来，定期线程池，也就是任务会定期执行，这个定期是在他调用schedule方法的时候，就像一个Timer定时器一样，而他的实现主要是靠DelayedWorkQueue这个延迟队列，他规定只有到达规定延迟时间以后才能获取里面的元素</p></blockquote>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;在我们自定义线程池之前，先预备一点前置知识&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;为什么要使用线程池？&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;New Thread这种方式性能差&lt;/li&gt;
+&lt;li&gt;缺乏统一管理，循环创建会照成OOM&lt;/li&gt;
+&lt;li&gt;功能单一&lt;/li&gt;
+&lt;/ol&gt;
+&lt;
+      
+    
+    </summary>
+    
+      <category term="java高级" scheme="http://yoursite.com/categories/java%E9%AB%98%E7%BA%A7/"/>
+    
+    
+      <category term="java" scheme="http://yoursite.com/tags/java/"/>
+    
+      <category term="多线程" scheme="http://yoursite.com/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+    
+      <category term="线程池" scheme="http://yoursite.com/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/"/>
     
   </entry>
   

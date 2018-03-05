@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="树莓派,温湿度传感器,毕业设计," />
+  <meta name="keywords" content="java,多线程,线程池," />
 
 
 
@@ -81,18 +81,20 @@
 
 
 
-<meta name="description" content="因为毕业设计选了个让自己一脸懵逼的题目，听同学说树莓派实现比较简单，所以我就花了4百大洋买了一个3B的板子和一个树莓派原装的摄像头（一百五左右，最后发现网上资料太少了!😭，而且只是搞下毕业设计，就不打算深究了，网上找个例子实现功能就可以了，不过拍的确实清晰）。好了，下面就说下怎么实现云平台实时监控温湿度把。其中有投机取巧的部分。其实我说的所有都只是一种方法，大家可以去尝试别的，下面就不赘述了，直">
-<meta name="keywords" content="树莓派,温湿度传感器,毕业设计">
+<meta name="description" content="在我们自定义线程池之前，先预备一点前置知识  为什么要使用线程池？   New Thread这种方式性能差 缺乏统一管理，循环创建会照成OOM 功能单一  对应的就是线程池的优点，JAVA1.5出来的Concurrent包里面提供了四种创建线程池的方法，我们可以直接创建，但阿里Java开发手册有这么一条  【强制】线程池不允许使用 Executors 去创建，而是通过ThreadPoolExecu">
+<meta name="keywords" content="java,多线程,线程池">
 <meta property="og:type" content="article">
-<meta property="og:title" content="树莓派3B-DHT11-Yeelink云平台（实现温湿度远程监控）">
-<meta property="og:url" content="http://yoursite.com/2015/07/09/树莓派3B-DHT11-Yeelink云平台（实现温湿度远程监控）/index.html">
+<meta property="og:title" content="自定义线程池（一）">
+<meta property="og:url" content="http://yoursite.com/2017/12/09/自定义线程池（一）/index.html">
 <meta property="og:site_name" content="天秤座">
-<meta property="og:description" content="因为毕业设计选了个让自己一脸懵逼的题目，听同学说树莓派实现比较简单，所以我就花了4百大洋买了一个3B的板子和一个树莓派原装的摄像头（一百五左右，最后发现网上资料太少了!😭，而且只是搞下毕业设计，就不打算深究了，网上找个例子实现功能就可以了，不过拍的确实清晰）。好了，下面就说下怎么实现云平台实时监控温湿度把。其中有投机取巧的部分。其实我说的所有都只是一种方法，大家可以去尝试别的，下面就不赘述了，直">
+<meta property="og:description" content="在我们自定义线程池之前，先预备一点前置知识  为什么要使用线程池？   New Thread这种方式性能差 缺乏统一管理，循环创建会照成OOM 功能单一  对应的就是线程池的优点，JAVA1.5出来的Concurrent包里面提供了四种创建线程池的方法，我们可以直接创建，但阿里Java开发手册有这么一条  【强制】线程池不允许使用 Executors 去创建，而是通过ThreadPoolExecu">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-03-05T03:24:26.000Z">
+<meta property="og:image" content="http://yoursite.com/2017/12/09/自定义线程池（一）/1.png">
+<meta property="og:updated_time" content="2018-03-05T08:23:47.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="树莓派3B-DHT11-Yeelink云平台（实现温湿度远程监控）">
-<meta name="twitter:description" content="因为毕业设计选了个让自己一脸懵逼的题目，听同学说树莓派实现比较简单，所以我就花了4百大洋买了一个3B的板子和一个树莓派原装的摄像头（一百五左右，最后发现网上资料太少了!😭，而且只是搞下毕业设计，就不打算深究了，网上找个例子实现功能就可以了，不过拍的确实清晰）。好了，下面就说下怎么实现云平台实时监控温湿度把。其中有投机取巧的部分。其实我说的所有都只是一种方法，大家可以去尝试别的，下面就不赘述了，直">
+<meta name="twitter:title" content="自定义线程池（一）">
+<meta name="twitter:description" content="在我们自定义线程池之前，先预备一点前置知识  为什么要使用线程池？   New Thread这种方式性能差 缺乏统一管理，循环创建会照成OOM 功能单一  对应的就是线程池的优点，JAVA1.5出来的Concurrent包里面提供了四种创建线程池的方法，我们可以直接创建，但阿里Java开发手册有这么一条  【强制】线程池不允许使用 Executors 去创建，而是通过ThreadPoolExecu">
+<meta name="twitter:image" content="http://yoursite.com/2017/12/09/自定义线程池（一）/1.png">
 
 
 
@@ -122,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2015/07/09/树莓派3B-DHT11-Yeelink云平台（实现温湿度远程监控）/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/12/09/自定义线程池（一）/"/>
 
 
 
 
 
-  <title>树莓派3B-DHT11-Yeelink云平台（实现温湿度远程监控） | 天秤座</title>
+  <title>自定义线程池（一） | 天秤座</title>
   
 
 
@@ -265,7 +267,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/07/09/树莓派3B-DHT11-Yeelink云平台（实现温湿度远程监控）/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/09/自定义线程池（一）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="colin">
@@ -282,7 +284,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">树莓派3B-DHT11-Yeelink云平台（实现温湿度远程监控）</h1>
+          <h1 class="post-title" itemprop="name headline">自定义线程池（一）</h1>
         
 
         <div class="post-meta">
@@ -294,8 +296,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-07-09T10:37:46+08:00">
-                2015-07-09
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-09T16:17:23+08:00">
+                2017-12-09
               </time>
             
 
@@ -317,8 +319,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/嵌入式/" itemprop="url" rel="index">
-                    <span itemprop="name">嵌入式</span>
+                  <a href="/categories/java高级/" itemprop="url" rel="index">
+                    <span itemprop="name">java高级</span>
                   </a>
                 </span>
 
@@ -354,46 +356,68 @@
       
 
       
-        <p>因为毕业设计选了个让自己一脸懵逼的题目，听同学说树莓派实现比较简单，所以我就花了4百大洋买了一个3B的板子和一个树莓派原装的摄像头（一百五左右，最后发现网上资料太少了!😭，而且只是搞下毕业设计，就不打算深究了，网上找个例子实现功能就可以了，不过拍的确实清晰）。好了，下面就说下怎么实现云平台实时监控温湿度把。其中有投机取巧的部分。其实我说的所有都只是一种方法，大家可以去尝试别的，下面就不赘述了，直接写过程。</p>
+        <p>在我们自定义线程池之前，先预备一点前置知识</p>
 <ul>
-<li>装系统</li>
+<li>为什么要使用线程池？</li>
 </ul>
-<p>装系统的话，直接去官网下载就行，毕竟用的树莓派，我就下了raspbian，带桌面（毕竟小白）这是下载链接<a href="https://downloads.raspberrypi.org/raspbian_latest" target="_blank" rel="noopener">https://downloads.raspberrypi.org/raspbian_latest</a></p>
-<p>同时需要一个写入工具，我当时应该不是在官网下的，这是链接，速度挺快，下载完解压就行<a href="http://124.202.164.7/files/4125000005975BAB/vzidc.newhua.com/down/Win32DiskImager-0.9.5-binary.zip" target="_blank" rel="noopener">http://124.202.164.7/files/4125000005975BAB/vzidc.newhua.com/down/Win32DiskImager-0.9.5-binary.zip</a></p>
-<p>然后需要一张4g以上的sd卡，反正我用的8g，我用的就是很早以前手机里的内存卡，同时需要一个读卡器，打开读写工具，然后把解压后的img系统文件写入到内存卡，就可以了</p>
+<ol>
+<li>New Thread这种方式性能差</li>
+<li>缺乏统一管理，循环创建会照成OOM</li>
+<li>功能单一</li>
+</ol>
+<p>对应的就是线程池的优点，JAVA1.5出来的Concurrent包里面提供了四种创建线程池的方法，我们可以直接创建，但阿里Java开发手册有这么一条</p>
+<blockquote>
+<p>【强制】线程池不允许使用 Executors 去创建，而是通过ThreadPoolExecutor 的方式</p>
+</blockquote>
+<p>这样的好处就强制开发者去了解线程池的创建原理，从而避免资源耗尽的风险，而且Executors中四种线程池创建方式其实都依赖于ThreadPollExecutor这个类的构造。</p>
 <ul>
-<li>登录树莓派</li>
+<li>线程池概念</li>
 </ul>
-<p>第一次登录用ssh工具，首先你需要知道局域网给你的树莓派分配的IP地址，可以使用一个端口扫描工具，看看哪儿22端口是开放的，然后xshell链接</p>
+<img src="/2017/12/09/自定义线程池（一）/1.png" title="关系图">
+<p>从图中可以看到各个类和接口的关系，同时可以看到Executors和其他类或接口没有什么直接关系，我们可以把他当成一个线程池工厂，用来创建四种线程池。</p>
+<p>先说下ThreadPoolExecutor</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">int</span> maximumPoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">long</span> keepAliveTime,</span></span></span><br><span class="line"><span class="function"><span class="params">        TimeUnit unit,</span></span></span><br><span class="line"><span class="function"><span class="params">        BlockingQueue&lt;Runnable&gt; workQueue,</span></span></span><br><span class="line"><span class="function"><span class="params">        ThreadFactory threadFactory,</span></span></span><br><span class="line"><span class="function"><span class="params">        RejectedExecutionHandler handler)</span></span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>corePoolSize：核心线程数大小</p>
+<p>maximumPoolSize：线程池最大线程数</p>
+<p>keepAliveTime：当线程数大于核心时，清除空闲keepAliveTime时间的线程</p>
+<p>unit：时间单位</p>
+<p>workQueue：存储等待任务的队列</p>
+<p>threadFactory：线程工厂</p>
+<p>handler：拒绝策略</p>
+</blockquote>
+<p>刚创建的线程池是没有任何线程的，当过来一个任务，就启动一个线程去执行，当线程池达到核心线程数的话，就把新加进来的任务放到阻塞队列，如果阻塞队列是有边界的话，到达边界以后就会去创建新的线程，接下来就会出现两种情况：</p>
+<ol>
+<li>如果任务不再来了，那么就会把空闲keepAliveTime时间的线程给移除掉</li>
+<li>如果任务接着来，并且已经达到了最大线程数，那么就要执行拒绝策略了</li>
+</ol>
+<p>其中等待队列有多种ArrayBlockingQueue，LinkedBlockingQueue，LinkedBlockingDeque，SynchronousQueue，根据具体情况而定。</p>
+<p>拒绝策略也有很多种</p>
+<ol>
+<li>AbortPolicy：丢弃任务并抛出RejectedExecutionException异常。 (默认)</li>
+<li>DiscardPolicy：也是丢弃任务，但是不抛出异常。</li>
+<li>DiscardOldestPolicy：丢弃队列最前面的任务，然后重新尝试执行任务（重复此过程）</li>
+<li>CallerRunsPolicy：由调用线程处理该任务</li>
+</ol>
 <ul>
-<li>显示图形界面</li>
+<li>四种创建线程池的方法</li>
 </ul>
-<p>我也不先配置别的了，先让大家看看图形界面吧，上vncviewer下载客户端，然后在xshell输入sudo apt-get install tightvncserver然后等读码完成，然后输入vncserver，接下来它让你设置密码，我设置12345678，然后确认再输入一次，接着打开vncviewer，在地址栏输入树莓派ip:1回车，然后输入12345678，回车就可以看到图形界面了</p>
-<ul>
-<li>树莓派连接上无线网路</li>
-</ul>
-<p>因为树莓派没有自带vim，所以我就先安装了vim，命令式sudo apt-get install vim</p>
-<p>然后sudo vim /etc/network/interfaces 然后修改成下列样式</p>
-<pre><code>auto lo
-iface loinet loopback
-ifaceeth0 inet dhcp
-autowlan0
-allow-hotplugwlan0
-ifacewlan0 inet dhcp
-      wpa-ssid 要连入的WiFi名
-      wpa-psk WiFi密码
-</code></pre><p>然后sudo /etc/init.d/networking restart 但是这时候会分配一个新的ip，然后xshell创建一个新的连接就行了</p>
-<p>修改配置</p>
-<p>这是树莓派3B的界面，别的修改项含义可以参考</p>
-<p><a href="http://blog.csdn.net/xdw1985829/article/details/38816375" target="_blank" rel="noopener">http://blog.csdn.net/xdw1985829/article/details/38816375</a></p>
-<p>，我修改了第一项，让文件系统覆盖整个sd卡，同时修改了时区，如果不修改时区的话，接下来上传的数据时间不正确</p>
-<p>安装WiringPi</p>
-<p>sudo apt-get install wiringPi 安装完可以测试一下gpio readall然后会显示一些东西就证明可以了</p>
-<p>接下来就是程序和怎么连接到yeelink上了</p>
-<p>下载我整理好的程序，test.c是源文件可以使用gcc编译一下，编译命令式gcc –Wall –o 输出的文件名  编译的文件名 –lwiringPi 然后生成一个你要生成的文件名</p>
-<p>接下来修改shell脚本,Yeelink教程网上很多，我就不介绍了，得到两个传感器的URL就行，还有你的API key，替换成你的API key和URL，同时还有你编译.c生成的文件的路径</p>
-<p>这是我写的，有点投机取巧✌️，勉强能用。</p>
-<p>链接：<a href="http://pan.baidu.com/s/1nuXLmAl" target="_blank" rel="noopener">http://pan.baidu.com/s/1nuXLmAl</a> 密码：yjvq</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newSingleThreadExecutor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> FinalizableDelegatedExecutorService</span><br><span class="line">    	(<span class="keyword">new</span> ThreadPoolExecutor(</span><br><span class="line">            	<span class="number">1</span>, <span class="number">1</span>,</span><br><span class="line">        		<span class="number">0L</span>, TimeUnit.MILLISECONDS,</span><br><span class="line">                <span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;()));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>创建一个单线程，你看名字里面都没有ThreadPool:smile:，如果这个线程死了，他会创建一个新的线程来替代。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newCachedThreadPool</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ThreadPoolExecutor(</span><br><span class="line">                <span class="number">0</span>, Integer.MAX_VALUE,</span><br><span class="line">                <span class="number">60L</span>, TimeUnit.SECONDS,</span><br><span class="line">                <span class="keyword">new</span> SynchronousQueue&lt;Runnable&gt;());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这个线程的特点从等待队列就可以看出来，这个队列根本不存储数据，只是做一个通道，一边进一边出。最大线程数为Integer.MAX_VALUE,也就是过来一个任务我就创建一个线程，当线程数大于任务数的时候就去回收那些空闲超过60秒的线程。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newFixedThreadPool</span><span class="params">(<span class="keyword">int</span> nThreads)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> ThreadPoolExecutor(</span><br><span class="line">        	nThreads, nThreads,</span><br><span class="line">    		<span class="number">0L</span>, TimeUnit.MILLISECONDS,</span><br><span class="line">            <span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这个线程池核心线程和最大线程数相等，也就是说，过来一个任务，就直接创建一个线程，等到了最大线程数，你看keepAliveTime为0，所以就是不管线程使用不适用都不回收，如果线程挂了的话会重新创建一个。为了不然频繁丢弃任务，这里使用了一个无界链表队列。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ScheduledThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">super</span>(</span><br><span class="line">          corePoolSize, Integer.MAX_VALUE,</span><br><span class="line">          <span class="number">0</span>, NANOSECONDS,</span><br><span class="line">    	  <span class="keyword">new</span> DelayedWorkQueue());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这个线程池的特点从名字就可以看出来，定期线程池，也就是任务会定期执行，这个定期是在他调用schedule方法的时候，就像一个Timer定时器一样，而他的实现主要是靠DelayedWorkQueue这个延迟队列，他规定只有到达规定延迟时间以后才能获取里面的元素</p>
+</blockquote>
 
       
     </div>
@@ -440,11 +464,11 @@ ifacewlan0 inet dhcp
       
         <div class="post-tags">
           
-            <a href="/tags/树莓派/" rel="tag"># 树莓派</a>
+            <a href="/tags/java/" rel="tag"># java</a>
           
-            <a href="/tags/温湿度传感器/" rel="tag"># 温湿度传感器</a>
+            <a href="/tags/多线程/" rel="tag"># 多线程</a>
           
-            <a href="/tags/毕业设计/" rel="tag"># 毕业设计</a>
+            <a href="/tags/线程池/" rel="tag"># 线程池</a>
           
         </div>
       
@@ -457,8 +481,8 @@ ifacewlan0 inet dhcp
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/02/07/java之char数组输出/" rel="next" title="java之char数组输出">
-                <i class="fa fa-chevron-left"></i> java之char数组输出
+              <a href="/2015/07/09/树莓派3B-DHT11-Yeelink云平台（实现温湿度远程监控）/" rel="next" title="树莓派3B-DHT11-Yeelink云平台（实现温湿度远程监控）">
+                <i class="fa fa-chevron-left"></i> 树莓派3B-DHT11-Yeelink云平台（实现温湿度远程监控）
               </a>
             
           </div>
@@ -467,8 +491,8 @@ ifacewlan0 inet dhcp
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/12/09/自定义线程池（一）/" rel="prev" title="自定义线程池（一）">
-                自定义线程池（一） <i class="fa fa-chevron-right"></i>
+              <a href="/2018/01/23/java值传递和引用传递/" rel="prev" title="java值传递和引用传递">
+                java值传递和引用传递 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
