@@ -90,7 +90,7 @@
 <meta property="og:description" content="在我们自定义线程池之前，先预备一点前置知识  为什么要使用线程池？   New Thread这种方式性能差 缺乏统一管理，循环创建会照成OOM 功能单一  对应的就是线程池的优点，JAVA1.5出来的Concurrent包里面提供了四种创建线程池的方法，我们可以直接创建，但阿里Java开发手册有这么一条  【强制】线程池不允许使用 Executors 去创建，而是通过ThreadPoolExecu">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2017/12/09/自定义线程池（一）/1.png">
-<meta property="og:updated_time" content="2018-03-05T08:23:47.000Z">
+<meta property="og:updated_time" content="2018-03-05T10:15:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="自定义线程池（一）">
 <meta name="twitter:description" content="在我们自定义线程池之前，先预备一点前置知识  为什么要使用线程池？   New Thread这种方式性能差 缺乏统一管理，循环创建会照成OOM 功能单一  对应的就是线程池的优点，JAVA1.5出来的Concurrent包里面提供了四种创建线程池的方法，我们可以直接创建，但阿里Java开发手册有这么一条  【强制】线程池不允许使用 Executors 去创建，而是通过ThreadPoolExecu">
@@ -386,7 +386,7 @@
 <p>threadFactory：线程工厂</p>
 <p>handler：拒绝策略</p>
 </blockquote>
-<p>刚创建的线程池是没有任何线程的，当过来一个任务，就启动一个线程去执行，当线程池达到核心线程数的话，就把新加进来的任务放到阻塞队列，如果阻塞队列是有边界的话，到达边界以后就会去创建新的线程，接下来就会出现两种情况：</p>
+<p>刚创建的线程池是没有任何线程的，当过来一个任务，就启动一个线程去执行，再过来一个还创建一个新的线程，即便之前的已经空闲了，当线程池达到核心线程数的话，如果没有空闲线程，就把新加进来的任务放到阻塞队列，如果阻塞队列是有边界的话，到达边界以后就会去创建新的线程，接下来就会出现两种情况：</p>
 <ol>
 <li>如果任务不再来了，那么就会把空闲keepAliveTime时间的线程给移除掉</li>
 <li>如果任务接着来，并且已经达到了最大线程数，那么就要执行拒绝策略了</li>
@@ -491,8 +491,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/01/23/java值传递和引用传递/" rel="prev" title="java值传递和引用传递">
-                java值传递和引用传递 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/12/11/自定义线程池（二）/" rel="prev" title="自定义线程池（二）">
+                自定义线程池（二） <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -561,7 +561,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
