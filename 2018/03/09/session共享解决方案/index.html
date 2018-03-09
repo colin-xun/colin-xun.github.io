@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="机器学习,ML,算法,神经网络,libra,天秤座" />
+  <meta name="keywords" content="分布式,session,一致性,共享," />
 
 
 
@@ -81,16 +81,18 @@
 
 
 
-<meta name="description" content="生而为人，对不起">
-<meta property="og:type" content="website">
-<meta property="og:title" content="天秤座">
-<meta property="og:url" content="http://yoursite.com/tags/基础/index.html">
+<meta name="description" content="用户通过浏览器访问服务器的时候，服务器会自动产生session，用来存放用户信息，登录信息等内容，在分布式的系统中，如何保证session的一致性呢？  方法一：session同步 这个很好解释，也就是每新生成一个session，我们都把他同步到所有的服务器上面，这样每台服务器都有所有用户的session了，这是一种解决方法 优点：实现思路简单 缺点：    占用带宽，也就是每次都要去同步sess">
+<meta name="keywords" content="分布式,session,一致性,共享">
+<meta property="og:type" content="article">
+<meta property="og:title" content="session共享解决方案">
+<meta property="og:url" content="http://yoursite.com/2018/03/09/session共享解决方案/index.html">
 <meta property="og:site_name" content="天秤座">
-<meta property="og:description" content="生而为人，对不起">
+<meta property="og:description" content="用户通过浏览器访问服务器的时候，服务器会自动产生session，用来存放用户信息，登录信息等内容，在分布式的系统中，如何保证session的一致性呢？  方法一：session同步 这个很好解释，也就是每新生成一个session，我们都把他同步到所有的服务器上面，这样每台服务器都有所有用户的session了，这是一种解决方法 优点：实现思路简单 缺点：    占用带宽，也就是每次都要去同步sess">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-09T05:46:54.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="天秤座">
-<meta name="twitter:description" content="生而为人，对不起">
+<meta name="twitter:title" content="session共享解决方案">
+<meta name="twitter:description" content="用户通过浏览器访问服务器的时候，服务器会自动产生session，用来存放用户信息，登录信息等内容，在分布式的系统中，如何保证session的一致性呢？  方法一：session同步 这个很好解释，也就是每新生成一个session，我们都把他同步到所有的服务器上面，这样每台服务器都有所有用户的session了，这是一种解决方法 优点：实现思路简单 缺点：    占用带宽，也就是每次都要去同步sess">
 
 
 
@@ -120,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/基础/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/03/09/session共享解决方案/"/>
 
 
 
 
 
-  <title>标签: 基础 | 天秤座</title>
+  <title>session共享解决方案 | 天秤座</title>
   
 
 
@@ -145,7 +147,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -249,110 +251,251 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block tag">
-
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>基础<small>标签</small>
-        </h1>
-      </div>
-
-      
-        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/09/session共享解决方案/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="colin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="天秤座">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/03/04/String之intern函数/" itemprop="url">
-              
-                <span itemprop="name">String之intern函数</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">session共享解决方案</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-03-04T11:36:18+08:00"
-              content="2018-03-04" >
-          03-04
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-09T13:43:54+08:00">
+                2018-03-09
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/分布式/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/01/23/java值传递和引用传递/" itemprop="url">
-              
-                <span itemprop="name">java值传递和引用传递</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-01-23T14:09:58+08:00"
-              content="2018-01-23" >
-          01-23
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+      
 
       
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2015/02/07/java之char数组输出/" itemprop="url">
-              
-                <span itemprop="name">java之char数组输出</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2015-02-07T10:37:46+08:00"
-              content="2015-02-07" >
-          02-07
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+        <p>用户通过浏览器访问服务器的时候，服务器会自动产生session，用来存放用户信息，登录信息等内容，在分布式的系统中，如何保证session的一致性呢？</p>
+<ul>
+<li><p>方法一：session同步</p>
+<p>这个很好解释，也就是每新生成一个session，我们都把他同步到所有的服务器上面，这样每台服务器都有所有用户的session了，这是一种解决方法</p>
+<p>优点：实现思路简单</p>
+<p>缺点：  </p>
+<ol>
+<li>占用带宽，也就是每次都要去同步session，当服务器多的时候情况会很明显</li>
+<li>占用内存，每台服务器都要存储所有的session，当session多的时候情况会很明显</li>
+</ol>
+</li>
+<li><p>方法二：客户端存储</p>
+<p>用客户端来存放用户信息，登录信息等内容，下次请求的时候携带过来就行了，也是一种实现方法</p>
+<p>优点：服务端不用存储</p>
+<p>缺点：</p>
+<ol>
+<li>安全性下降：cookie容易被窃取</li>
+<li>存储数据量小，不同浏览器允许的cookie大小有限。</li>
+</ol>
+</li>
+<li><p>方法三：一致性hash</p>
+<p>使用一致性hash算法计算出每个session存放的服务器，例如使用IP来做一致性hash，那么这个IP对应的session存放在哪一台服务器就确定了</p>
+<p>优点：</p>
+<ol>
+<li>工作量小，不需要更改代码，只要配置nginx就可以了</li>
+<li>支持水平扩展</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>当新水平扩展的时候，要从新计算hash值，用户需要重新登录</li>
+<li>服务器重启，数据丢失</li>
+</ol>
+</li>
+<li><p>方法四：后台统一存储</p>
+<p>把session存放到数据库或缓存中</p>
+<p>优点：</p>
+<ol>
+<li>安全性高：即便重启了数据依然存在</li>
+<li>水平扩展：因为session是单独存储的，所以不影响水平扩展</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>代码改动量大：当然如果一开始就使用的话，也是很简单的</li>
+<li>增加了一次服务调用</li>
+</ol>
+</li>
+</ul>
+<p>目前公司在使用的是redis中的session共享，使用redis的好处是速度快而且支持持久化。</p>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpeg" alt="colin 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpeg" alt="colin 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/分布式/" rel="tag"># 分布式</a>
+          
+            <a href="/tags/session/" rel="tag"># session</a>
+          
+            <a href="/tags/一致性/" rel="tag"># 一致性</a>
+          
+            <a href="/tags/共享/" rel="tag"># 共享</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/04/String之intern函数/" rel="next" title="String之intern函数">
+                <i class="fa fa-chevron-left"></i> String之intern函数
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -360,6 +503,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -599,6 +746,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
