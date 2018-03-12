@@ -81,21 +81,21 @@
 
 
 
-<meta name="description" content="在分布式一致性中Paxos算法是一个非常重要的算法，阿里实现的X-Paxos，腾讯的phxpaxos（开源） ###Basic Paxos Paxos四个角色：  Client：议题提出者 Proposer：提议者 Acceptor：投票者 Learner：决策者   图中只是显示一个提议的执行过程，步骤是  Client（提议发起者）提出一个提议，交给一个Propser 这个Propser带着一">
+<meta name="description" content="在分布式一致性中Paxos算法是一个非常重要的算法，阿里实现的X-Paxos，腾讯的phxpaxos（开源） Basic PaxosPaxos四个角色：  Client：议题提出者 Proposer：提议者 Acceptor：投票者 Learner：决策者   图中只是显示一个提议的执行过程，步骤是  Client（提议发起者）提出一个提议，交给一个Propser 这个Propser带着一个值（可">
 <meta name="keywords" content="一致性,算法,分布式">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Paxos算法">
-<meta property="og:url" content="http://yoursite.com/2018/03/13/Paxos算法/index.html">
+<meta property="og:url" content="http://yoursite.com/2018/01/03/Paxos算法/index.html">
 <meta property="og:site_name" content="天秤座">
-<meta property="og:description" content="在分布式一致性中Paxos算法是一个非常重要的算法，阿里实现的X-Paxos，腾讯的phxpaxos（开源） ###Basic Paxos Paxos四个角色：  Client：议题提出者 Proposer：提议者 Acceptor：投票者 Learner：决策者   图中只是显示一个提议的执行过程，步骤是  Client（提议发起者）提出一个提议，交给一个Propser 这个Propser带着一">
+<meta property="og:description" content="在分布式一致性中Paxos算法是一个非常重要的算法，阿里实现的X-Paxos，腾讯的phxpaxos（开源） Basic PaxosPaxos四个角色：  Client：议题提出者 Proposer：提议者 Acceptor：投票者 Learner：决策者   图中只是显示一个提议的执行过程，步骤是  Client（提议发起者）提出一个提议，交给一个Propser 这个Propser带着一个值（可">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2018/03/13/Paxos算法/1.png">
-<meta property="og:image" content="http://yoursite.com/2018/03/13/Paxos算法/2.png">
-<meta property="og:updated_time" content="2018-03-12T16:04:14.000Z">
+<meta property="og:image" content="http://yoursite.com/2018/01/03/Paxos算法/1.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/03/Paxos算法/2.png">
+<meta property="og:updated_time" content="2018-03-12T16:08:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Paxos算法">
-<meta name="twitter:description" content="在分布式一致性中Paxos算法是一个非常重要的算法，阿里实现的X-Paxos，腾讯的phxpaxos（开源） ###Basic Paxos Paxos四个角色：  Client：议题提出者 Proposer：提议者 Acceptor：投票者 Learner：决策者   图中只是显示一个提议的执行过程，步骤是  Client（提议发起者）提出一个提议，交给一个Propser 这个Propser带着一">
-<meta name="twitter:image" content="http://yoursite.com/2018/03/13/Paxos算法/1.png">
+<meta name="twitter:description" content="在分布式一致性中Paxos算法是一个非常重要的算法，阿里实现的X-Paxos，腾讯的phxpaxos（开源） Basic PaxosPaxos四个角色：  Client：议题提出者 Proposer：提议者 Acceptor：投票者 Learner：决策者   图中只是显示一个提议的执行过程，步骤是  Client（提议发起者）提出一个提议，交给一个Propser 这个Propser带着一个值（可">
+<meta name="twitter:image" content="http://yoursite.com/2018/01/03/Paxos算法/1.png">
 
 
 
@@ -125,7 +125,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/03/13/Paxos算法/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/01/03/Paxos算法/"/>
 
 
 
@@ -268,7 +268,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/13/Paxos算法/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/03/Paxos算法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="colin">
@@ -297,8 +297,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-13T00:00:19+08:00">
-                2018-03-13
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-03T00:00:19+08:00">
+                2018-01-03
               </time>
             
 
@@ -369,15 +369,14 @@
 
       
         <p>在分布式一致性中Paxos算法是一个非常重要的算法，阿里实现的X-Paxos，腾讯的phxpaxos（开源）</p>
-<p>###Basic Paxos</p>
-<p>Paxos四个角色：</p>
+<h3 id="Basic-Paxos"><a href="#Basic-Paxos" class="headerlink" title="Basic Paxos"></a>Basic Paxos</h3><p>Paxos四个角色：</p>
 <ul>
 <li>Client：议题提出者</li>
 <li>Proposer：提议者</li>
 <li>Acceptor：投票者</li>
 <li>Learner：决策者</li>
 </ul>
-<img src="/2018/03/13/Paxos算法/1.png" title="Basic Paxos">
+<img src="/2018/01/03/Paxos算法/1.png" title="Basic Paxos">
 <p>图中只是显示一个提议的执行过程，步骤是</p>
 <ol>
 <li>Client（提议发起者）提出一个提议，交给一个Propser</li>
@@ -395,9 +394,8 @@
 <li>如果Propser到达的Acceptor已经接受了某个协议，那么Propser就会把自己的协议改成Acceptor记录的协议</li>
 </ol>
 </blockquote>
-<p>###Multi Paxos</p>
-<p>Basic Paxos因为是2-Phase，所以延时很高，而且它最后只确定了一个值。而Multi Paxos正好解决了这两个问题。</p>
-<img src="/2018/03/13/Paxos算法/2.png" title="Multi Paxos">
+<h3 id="Multi-Paxos"><a href="#Multi-Paxos" class="headerlink" title="Multi Paxos"></a>Multi Paxos</h3><p>Basic Paxos因为是2-Phase，所以延时很高，而且它最后只确定了一个值。而Multi Paxos正好解决了这两个问题。</p>
+<img src="/2018/01/03/Paxos算法/2.png" title="Multi Paxos">
 <p>如图所示，Multi Paxos只有一个阶段，其实在Basic Paxos中第一个阶段只是为了防止多个提议照成的冲突，而真正验证是否一致性的是第二个阶段，当超过一半的都已经接受同一个提议，那么则个协议肯定通过了。</p>
 <p>而之所以能去掉第一个阶段是因为只有一个Propser在提议，所以只要保证半数成功即可，因为是一个所以不能并发，而这个Propser的选取有的说是使用Basic Paxos来选举的，其实在Paxos原论文有一种更好的方式，就是Acceptor节点接受到其他节点的请求的话，执行一段时间的提交请求。</p>
 
@@ -463,8 +461,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/03/04/String之intern函数/" rel="next" title="String之intern函数">
-                <i class="fa fa-chevron-left"></i> String之intern函数
+              <a href="/2017/12/11/自定义线程池（二）/" rel="next" title="自定义线程池（二）">
+                <i class="fa fa-chevron-left"></i> 自定义线程池（二）
               </a>
             
           </div>
@@ -472,6 +470,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/23/java值传递和引用传递/" rel="prev" title="java值传递和引用传递">
+                java值传递和引用传递 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -523,8 +525,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -613,6 +624,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Basic-Paxos"><span class="nav-number">1.</span> <span class="nav-text">Basic Paxos</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Multi-Paxos"><span class="nav-number">2.</span> <span class="nav-text">Multi Paxos</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
