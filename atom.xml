@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-03-04T03:38:03.000Z</updated>
+  <updated>2018-03-12T16:04:14.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,42 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Paxos算法</title>
+    <link href="http://yoursite.com/2018/03/13/Paxos%E7%AE%97%E6%B3%95/"/>
+    <id>http://yoursite.com/2018/03/13/Paxos算法/</id>
+    <published>2018-03-12T16:00:19.000Z</published>
+    <updated>2018-03-12T16:04:14.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>在分布式一致性中Paxos算法是一个非常重要的算法，阿里实现的X-Paxos，腾讯的phxpaxos（开源）</p><p>###Basic Paxos</p><p>Paxos四个角色：</p><ul><li>Client：议题提出者</li><li>Proposer：提议者</li><li>Acceptor：投票者</li><li>Learner：决策者</li></ul><img src="/2018/03/13/Paxos算法/1.png" title="Basic Paxos"><p>图中只是显示一个提议的执行过程，步骤是</p><ol><li>Client（提议发起者）提出一个提议，交给一个Propser</li><li>这个Propser带着一个值（可以理解为id）去告诉所有的Acceptor</li><li>Acceptor看看自己的id，发现为空，然后就记录下Propser的id。</li><li>Propser第二次带着id和提议去找所有的Acceptor，那些记录的id还是自己的话，Acceptor就接受这个提议，记录下并告诉Learner</li><li>当Learner发现这一协议已经超过半数了，那么就代表通过了，然后把信息返回给Client</li></ol><p>从执行过程可以看到，朴素Pexos是一个2-Phase，第一阶段先去告诉Acceptor我的id，第二阶段才让Acceptor去接受协议。</p><blockquote><p>多Propser的时候要注意</p><ol><li>如果一个Propser携带的id比Acceptor记录的小，那么会被拒绝</li><li>如果Propser携带的id大于Acceptor的id，那么就覆盖Acceptor的id</li><li>如果Propser到达的Acceptor已经接受了某个协议，那么Propser就会把自己的协议改成Acceptor记录的协议</li></ol></blockquote><p>###Multi Paxos</p><p>Basic Paxos因为是2-Phase，所以延时很高，而且它最后只确定了一个值。而Multi Paxos正好解决了这两个问题。</p><img src="/2018/03/13/Paxos算法/2.png" title="Multi Paxos"><p>如图所示，Multi Paxos只有一个阶段，其实在Basic Paxos中第一个阶段只是为了防止多个提议照成的冲突，而真正验证是否一致性的是第二个阶段，当超过一半的都已经接受同一个提议，那么则个协议肯定通过了。</p><p>而之所以能去掉第一个阶段是因为只有一个Propser在提议，所以只要保证半数成功即可，因为是一个所以不能并发，而这个Propser的选取有的说是使用Basic Paxos来选举的，其实在Paxos原论文有一种更好的方式，就是Acceptor节点接受到其他节点的请求的话，执行一段时间的提交请求。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;在分布式一致性中Paxos算法是一个非常重要的算法，阿里实现的X-Paxos，腾讯的phxpaxos（开源）&lt;/p&gt;
+&lt;p&gt;###Basic Paxos&lt;/p&gt;
+&lt;p&gt;Paxos四个角色：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Client：议题提出者&lt;/li&gt;
+&lt;li&gt;Propose
+      
+    
+    </summary>
+    
+      <category term="分布式" scheme="http://yoursite.com/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+      <category term="一致性" scheme="http://yoursite.com/categories/%E5%88%86%E5%B8%83%E5%BC%8F/%E4%B8%80%E8%87%B4%E6%80%A7/"/>
+    
+    
+      <category term="一致性" scheme="http://yoursite.com/tags/%E4%B8%80%E8%87%B4%E6%80%A7/"/>
+    
+      <category term="算法" scheme="http://yoursite.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+      <category term="分布式" scheme="http://yoursite.com/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+  </entry>
   
   <entry>
     <title>String之intern函数</title>
@@ -168,13 +204,44 @@
       <category term="分布式" scheme="http://yoursite.com/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
     
+      <category term="一致性" scheme="http://yoursite.com/tags/%E4%B8%80%E8%87%B4%E6%80%A7/"/>
+    
       <category term="分布式" scheme="http://yoursite.com/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
       <category term="session" scheme="http://yoursite.com/tags/session/"/>
     
+      <category term="共享" scheme="http://yoursite.com/tags/%E5%85%B1%E4%BA%AB/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>拜占庭容错算法（PBFT）</title>
+    <link href="http://yoursite.com/2017/09/09/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%AE%B9%E9%94%99%E7%AE%97%E6%B3%95%EF%BC%88PBFT%EF%BC%89/"/>
+    <id>http://yoursite.com/2017/09/09/拜占庭容错算法（PBFT）/</id>
+    <published>2017-09-09T08:31:38.000Z</published>
+    <updated>2018-03-09T08:37:25.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>拜占庭将军问题反映到现实情况就是：在一个不可靠的信道上，如何保证信息传递的一致性。</p><p>解决方法：拜占庭容错算法（PBFT），分为三个阶段：预准备（pre-prepare）、准备（prepare）、确认（commit）</p><img src="/2017/09/09/拜占庭容错算法（PBFT）/1.jpg" title="流程图"><p>从图中可以看到C发出一个请求，四个信道中3号信道是有问题的。</p><p>第一步：C发出请求，到了0（可以是任意信道）</p><p>第二步：0在预准备阶段广播到所有节点，其中3有故障未到达</p><p>第三步：准备阶段，如果收到的请求超过一定数量，发出广播</p><p>第四部：确认阶段，如果收到的请求超过一定数量，对C进行反馈</p><p>在N &gt;= 3F + 1的情况下一致性是可以用这种方法解决的，N是总计算机数，F是有问题的计算机数</p><img src="/2017/09/09/拜占庭容错算法（PBFT）/2.png"><p>可以看出在错误节点小于1/3的时候，这种方法时可行的。央行使用的就是PBFT。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;拜占庭将军问题反映到现实情况就是：在一个不可靠的信道上，如何保证信息传递的一致性。&lt;/p&gt;
+&lt;p&gt;解决方法：拜占庭容错算法（PBFT），分为三个阶段：预准备（pre-prepare）、准备（prepare）、确认（commit）&lt;/p&gt;
+&lt;img src=&quot;/2017/09
+      
+    
+    </summary>
+    
+      <category term="算法" scheme="http://yoursite.com/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    
       <category term="一致性" scheme="http://yoursite.com/tags/%E4%B8%80%E8%87%B4%E6%80%A7/"/>
     
-      <category term="共享" scheme="http://yoursite.com/tags/%E5%85%B1%E4%BA%AB/"/>
+      <category term="算法" scheme="http://yoursite.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+      <category term="区块链" scheme="http://yoursite.com/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
     
   </entry>
   
