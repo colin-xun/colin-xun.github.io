@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="java,多线程,线程池," />
+  <meta name="keywords" content="数据库,底层原理,数据结构," />
 
 
 
@@ -81,20 +81,36 @@
 
 
 
-<meta name="description" content="在我们自定义线程池之前，先预备一点前置知识  为什么要使用线程池？   New Thread这种方式性能差 缺乏统一管理，循环创建会照成OOM 功能单一  对应的就是线程池的优点，JAVA1.5出来的Concurrent包里面提供了四种创建线程池的方法，我们可以直接创建，但阿里Java开发手册有这么一条  【强制】线程池不允许使用 Executors 去创建，而是通过ThreadPoolExecu">
-<meta name="keywords" content="java,多线程,线程池">
+<meta name="description" content="我们看一些数据库索引文章的时候，避免不了会看到B-Tree或者B+Tree，那么什么是B-Tree呢？为什么数据库普遍喜欢这个数据结构呢？下面就从这两点说起 什么是B-TreeB树最早接触时在严蔚敏的数据结构中了解到的，那么我们根据一张图来看看她给出的定义   一颗m阶的B树，或为空树，或为满足一下特性的m叉树：  书中每一个节点至多有m颗子树； 若根节点不是叶子节点，则至少有两颗子树； 除根节点">
+<meta name="keywords" content="数据库,底层原理,数据结构">
 <meta property="og:type" content="article">
-<meta property="og:title" content="自定义线程池（一）">
-<meta property="og:url" content="http://yoursite.com/2017/12/09/自定义线程池（一）/index.html">
+<meta property="og:title" content="数据库索引之BTree">
+<meta property="og:url" content="http://yoursite.com/2018/03/29/数据库索引之BTree/index.html">
 <meta property="og:site_name" content="天秤座">
-<meta property="og:description" content="在我们自定义线程池之前，先预备一点前置知识  为什么要使用线程池？   New Thread这种方式性能差 缺乏统一管理，循环创建会照成OOM 功能单一  对应的就是线程池的优点，JAVA1.5出来的Concurrent包里面提供了四种创建线程池的方法，我们可以直接创建，但阿里Java开发手册有这么一条  【强制】线程池不允许使用 Executors 去创建，而是通过ThreadPoolExecu">
+<meta property="og:description" content="我们看一些数据库索引文章的时候，避免不了会看到B-Tree或者B+Tree，那么什么是B-Tree呢？为什么数据库普遍喜欢这个数据结构呢？下面就从这两点说起 什么是B-TreeB树最早接触时在严蔚敏的数据结构中了解到的，那么我们根据一张图来看看她给出的定义   一颗m阶的B树，或为空树，或为满足一下特性的m叉树：  书中每一个节点至多有m颗子树； 若根节点不是叶子节点，则至少有两颗子树； 除根节点">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2017/12/09/自定义线程池（一）/1.png">
-<meta property="og:updated_time" content="2018-03-05T10:15:48.000Z">
+<meta property="og:image" content="http://yoursite.com/Users/colin/Desktop/1.png">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=%28n%2CA_%7B0%7D+%2CK_%7B1%7D%2CA_%7B1%7D%2CK_%7B2%7D+%2CA_%7B2%7D%2C...%2CK_%7Bn%7D%2CA_%7Bn%7D%29">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=K_%7Bi%7D">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=i%3D1%2C...%2Cn">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=K_%7Bi%7D%3CK_%7Bi%2B1%7D">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=i%3D1%2C...%2Cn-1">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=A_%7Bi%7D">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=i%3D0%2C...%2Cn">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=A_%7Bi-1%7D">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=K_%7Bi%7D">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=i%3D1%2C...%2Cn">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=A_%7Bn%7D+">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=K_%7Bn%7D+">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=n">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=%5Clceil+m%2F2-1+%5Crceil+%5Cleq+n+%5Cleq+m-1">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=n%2B1">
+<meta property="og:image" content="http://yoursite.com/Users/colin/Desktop/2.png">
+<meta property="og:updated_time" content="2018-03-29T11:12:30.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="自定义线程池（一）">
-<meta name="twitter:description" content="在我们自定义线程池之前，先预备一点前置知识  为什么要使用线程池？   New Thread这种方式性能差 缺乏统一管理，循环创建会照成OOM 功能单一  对应的就是线程池的优点，JAVA1.5出来的Concurrent包里面提供了四种创建线程池的方法，我们可以直接创建，但阿里Java开发手册有这么一条  【强制】线程池不允许使用 Executors 去创建，而是通过ThreadPoolExecu">
-<meta name="twitter:image" content="http://yoursite.com/2017/12/09/自定义线程池（一）/1.png">
+<meta name="twitter:title" content="数据库索引之BTree">
+<meta name="twitter:description" content="我们看一些数据库索引文章的时候，避免不了会看到B-Tree或者B+Tree，那么什么是B-Tree呢？为什么数据库普遍喜欢这个数据结构呢？下面就从这两点说起 什么是B-TreeB树最早接触时在严蔚敏的数据结构中了解到的，那么我们根据一张图来看看她给出的定义   一颗m阶的B树，或为空树，或为满足一下特性的m叉树：  书中每一个节点至多有m颗子树； 若根节点不是叶子节点，则至少有两颗子树； 除根节点">
+<meta name="twitter:image" content="http://yoursite.com/Users/colin/Desktop/1.png">
 
 
 
@@ -124,13 +140,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/12/09/自定义线程池（一）/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/03/29/数据库索引之BTree/"/>
 
 
 
 
 
-  <title>自定义线程池（一） | 天秤座</title>
+  <title>数据库索引之BTree | 天秤座</title>
   
 
 
@@ -267,7 +283,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/09/自定义线程池（一）/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/29/数据库索引之BTree/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="colin">
@@ -284,7 +300,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">自定义线程池（一）</h1>
+          <h1 class="post-title" itemprop="name headline">数据库索引之BTree</h1>
         
 
         <div class="post-meta">
@@ -296,8 +312,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-09T16:17:23+08:00">
-                2017-12-09
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-29T19:08:39+08:00">
+                2018-03-29
               </time>
             
 
@@ -319,8 +335,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java高级/" itemprop="url" rel="index">
-                    <span itemprop="name">java高级</span>
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
                   </a>
                 </span>
 
@@ -356,68 +372,42 @@
       
 
       
-        <p>在我们自定义线程池之前，先预备一点前置知识</p>
-<ul>
-<li>为什么要使用线程池？</li>
-</ul>
+        <p>我们看一些数据库索引文章的时候，避免不了会看到B-Tree或者B+Tree，那么什么是B-Tree呢？为什么数据库普遍喜欢这个数据结构呢？下面就从这两点说起</p>
+<h6 id="什么是B-Tree"><a href="#什么是B-Tree" class="headerlink" title="什么是B-Tree"></a>什么是B-Tree</h6><p>B树最早接触时在严蔚敏的数据结构中了解到的，那么我们根据一张图来看看她给出的定义</p>
+<p><img src="/Users/colin/Desktop/1.png" alt="1"></p>
+<blockquote>
+<p>一颗m阶的B树，或为空树，或为满足一下特性的m叉树：</p>
 <ol>
-<li>New Thread这种方式性能差</li>
-<li>缺乏统一管理，循环创建会照成OOM</li>
-<li>功能单一</li>
+<li>书中每一个节点至多有m颗子树；</li>
+<li>若根节点不是叶子节点，则至少有两颗子树；</li>
+<li>除根节点之外的所有非终端节点至少有【m/2】颗子树；</li>
+<li>所有的非终端节点中包含下列信息数据<img src="https://www.zhihu.com/equation?tex=%28n%2CA_%7B0%7D+%2CK_%7B1%7D%2CA_%7B1%7D%2CK_%7B2%7D+%2CA_%7B2%7D%2C...%2CK_%7Bn%7D%2CA_%7Bn%7D%29" alt="(n,A_{0} ,K_{1},A_{1},K_{2} ,A_{2},...,K_{n},A_{n})">，其中：<img src="https://www.zhihu.com/equation?tex=K_%7Bi%7D" alt="K_{i}">（<img src="https://www.zhihu.com/equation?tex=i%3D1%2C...%2Cn" alt="i=1,...,n">）为关键字，且<img src="https://www.zhihu.com/equation?tex=K_%7Bi%7D%3CK_%7Bi%2B1%7D" alt="K_{i}&lt;K_{i+1}">（<img src="https://www.zhihu.com/equation?tex=i%3D1%2C...%2Cn-1" alt="i=1,...,n-1">）；<img src="https://www.zhihu.com/equation?tex=A_%7Bi%7D" alt="A_{i}">（<img src="https://www.zhihu.com/equation?tex=i%3D0%2C...%2Cn" alt="i=0,...,n">）为指向子树根节点的指针，且指针<img src="https://www.zhihu.com/equation?tex=A_%7Bi-1%7D" alt="A_{i-1}">所指子树中的所有节点的关键字均小于<img src="https://www.zhihu.com/equation?tex=K_%7Bi%7D" alt="K_{i}">（<img src="https://www.zhihu.com/equation?tex=i%3D1%2C...%2Cn" alt="i=1,...,n">），<img src="https://www.zhihu.com/equation?tex=A_%7Bn%7D+" alt="A_{n} ">所指子树中所有节点的关键字均大于<img src="https://www.zhihu.com/equation?tex=K_%7Bn%7D+" alt="K_{n} ">，<img src="https://www.zhihu.com/equation?tex=n" alt="n">（<img src="https://www.zhihu.com/equation?tex=%5Clceil+m%2F2-1+%5Crceil+%5Cleq+n+%5Cleq+m-1" alt="\lceil m/2-1 \rceil \leq n \leq m-1">）为关键字的个数（或<img src="https://www.zhihu.com/equation?tex=n%2B1" alt="n+1">为子树个数）</li>
+<li>所有的叶子节点都出现在同一层次上，并且不带信息（可以看作是外部节点或查找失败的节点，实际上这些节点不存在，指向这些节点的指针为空）。</li>
 </ol>
-<p>对应的就是线程池的优点，JAVA1.5出来的Concurrent包里面提供了四种创建线程池的方法，我们可以直接创建，但阿里Java开发手册有这么一条</p>
-<blockquote>
-<p>【强制】线程池不允许使用 Executors 去创建，而是通过ThreadPoolExecutor 的方式</p>
 </blockquote>
-<p>这样的好处就强制开发者去了解线程池的创建原理，从而避免资源耗尽的风险，而且Executors中四种线程池创建方式其实都依赖于ThreadPollExecutor这个类的构造。</p>
-<ul>
-<li>线程池概念</li>
-</ul>
-<img src="/2017/12/09/自定义线程池（一）/1.png" title="关系图">
-<p>从图中可以看到各个类和接口的关系，同时可以看到Executors和其他类或接口没有什么直接关系，我们可以把他当成一个线程池工厂，用来创建四种线程池。</p>
-<p>先说下ThreadPoolExecutor</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">int</span> maximumPoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">long</span> keepAliveTime,</span></span></span><br><span class="line"><span class="function"><span class="params">        TimeUnit unit,</span></span></span><br><span class="line"><span class="function"><span class="params">        BlockingQueue&lt;Runnable&gt; workQueue,</span></span></span><br><span class="line"><span class="function"><span class="params">        ThreadFactory threadFactory,</span></span></span><br><span class="line"><span class="function"><span class="params">        RejectedExecutionHandler handler)</span></span></span><br></pre></td></tr></table></figure>
+<p>从特性中我们看到：</p>
 <blockquote>
-<p>corePoolSize：核心线程数大小</p>
-<p>maximumPoolSize：线程池最大线程数</p>
-<p>keepAliveTime：当线程数大于核心时，清除空闲keepAliveTime时间的线程</p>
-<p>unit：时间单位</p>
-<p>workQueue：存储等待任务的队列</p>
-<p>threadFactory：线程工厂</p>
-<p>handler：拒绝策略</p>
-</blockquote>
-<p>刚创建的线程池是没有任何线程的，当过来一个任务，就启动一个线程去执行，再过来一个还创建一个新的线程，即便之前的已经空闲了，当线程池达到核心线程数的话，如果没有空闲线程，就把新加进来的任务放到阻塞队列，如果阻塞队列是有边界的话，到达边界以后就会去创建新的线程，接下来就会出现两种情况：</p>
 <ol>
-<li>如果任务不再来了，那么就会把空闲keepAliveTime时间的线程给移除掉</li>
-<li>如果任务接着来，并且已经达到了最大线程数，那么就要执行拒绝策略了</li>
+<li>B树是一个多叉树，而且是平衡树，关键字存放在整颗树中，性能等价于二分查找。</li>
+<li>因为每个节点至少有M／2个儿子，所以可以保证树的深度不会过深，但是新增节点和删除节点也要保证这个特性，所以会出现节点的分裂与合并。</li>
 </ol>
-<p>其中等待队列有多种ArrayBlockingQueue，LinkedBlockingQueue，LinkedBlockingDeque，SynchronousQueue，根据具体情况而定。</p>
-<p>拒绝策略也有很多种</p>
+</blockquote>
+<p>接下来我们聊聊B+树</p>
+<p>其实B+树的出现正是应文件系统所需才出现的一种数据结构，他是B树的变种，他的定义和B树有区别也有联系：</p>
+<p><img src="/Users/colin/Desktop/2.png" alt="2"></p>
+<blockquote>
 <ol>
-<li>AbortPolicy：丢弃任务并抛出RejectedExecutionException异常。 (默认)</li>
-<li>DiscardPolicy：也是丢弃任务，但是不抛出异常。</li>
-<li>DiscardOldestPolicy：丢弃队列最前面的任务，然后重新尝试执行任务（重复此过程）</li>
-<li>CallerRunsPolicy：由调用线程处理该任务</li>
+<li>有n颗子树的节点中含有n个关键字；</li>
+<li>所有叶子节点中包含了全部关键字信息，及指向含有这些关键字记录的指针，且叶子节点本身依关键字的大小从小到大顺序连接；</li>
+<li>所有的非终端节点可看成是索引部分，节点中仅含有其子树（根节点）中的最大或最小关键字；</li>
 </ol>
-<ul>
-<li>四种创建线程池的方法</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newSingleThreadExecutor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> FinalizableDelegatedExecutorService</span><br><span class="line">    	(<span class="keyword">new</span> ThreadPoolExecutor(</span><br><span class="line">            	<span class="number">1</span>, <span class="number">1</span>,</span><br><span class="line">        		<span class="number">0L</span>, TimeUnit.MILLISECONDS,</span><br><span class="line">                <span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;()));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>创建一个单线程，你看名字里面都没有ThreadPool:smile:，如果这个线程死了，他会创建一个新的线程来替代。</p>
 </blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newCachedThreadPool</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ThreadPoolExecutor(</span><br><span class="line">                <span class="number">0</span>, Integer.MAX_VALUE,</span><br><span class="line">                <span class="number">60L</span>, TimeUnit.SECONDS,</span><br><span class="line">                <span class="keyword">new</span> SynchronousQueue&lt;Runnable&gt;());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>这个线程的特点从等待队列就可以看出来，这个队列根本不存储数据，只是做一个通道，一边进一边出。最大线程数为Integer.MAX_VALUE,也就是过来一个任务我就创建一个线程，当线程数大于任务数的时候就去回收那些空闲超过60秒的线程。</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newFixedThreadPool</span><span class="params">(<span class="keyword">int</span> nThreads)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> ThreadPoolExecutor(</span><br><span class="line">        	nThreads, nThreads,</span><br><span class="line">    		<span class="number">0L</span>, TimeUnit.MILLISECONDS,</span><br><span class="line">            <span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>这个线程池核心线程和最大线程数相等，也就是说，过来一个任务，就直接创建一个线程，等到了最大线程数，你看keepAliveTime为0，所以就是不管线程使用不适用都不回收，如果线程挂了的话会重新创建一个。为了不然频繁丢弃任务，这里使用了一个无界链表队列。</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ScheduledThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">super</span>(</span><br><span class="line">          corePoolSize, Integer.MAX_VALUE,</span><br><span class="line">          <span class="number">0</span>, NANOSECONDS,</span><br><span class="line">    	  <span class="keyword">new</span> DelayedWorkQueue());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>这个线程池的特点从名字就可以看出来，定期线程池，也就是任务会定期执行，这个定期是在他调用schedule方法的时候，就像一个Timer定时器一样，而他的实现主要是靠DelayedWorkQueue这个延迟队列，他规定只有到达规定延迟时间以后才能获取里面的元素</p>
-</blockquote>
+<h6 id="数据库为什么要用B树"><a href="#数据库为什么要用B树" class="headerlink" title="数据库为什么要用B树"></a>数据库为什么要用B树</h6><p>其实数据库不用索引也是可以的，但是索引是为了加快查询，这在OLADP（线上分析处理）的时候是很重要的。而索引其实就是一种数据结构，有hash索引，全文索引，B+Tree索引，其实就是不同的数据结构，我们现在只谈论为什么用BTree。在之前我们先学习两个东西：</p>
+<ol>
+<li>局部性原理：当一个数据被用到时，其附近的数据通常也会马上被用到</li>
+<li>磁盘预读：即使使用了磁盘页中的一部分数据，磁盘也会把整个页读取给内存</li>
+</ol>
+<p>随着内存越来越大，很多时候我们都会做缓存，其实预读也是缓存。由于内存和磁盘的IO速度根本不在一个量级，在加上局部性原理，我们一般会按页读取（通常一页为4K）。数据库设计者把索引的每个节点都设计成一页，而且出度设置很大，这样就减少了深度，建设深度为d，那么一次查询最多进行d-1次IO就行了。</p>
 
       
     </div>
@@ -464,11 +454,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/java/" rel="tag"># java</a>
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
           
-            <a href="/tags/多线程/" rel="tag"># 多线程</a>
+            <a href="/tags/底层原理/" rel="tag"># 底层原理</a>
           
-            <a href="/tags/线程池/" rel="tag"># 线程池</a>
+            <a href="/tags/数据结构/" rel="tag"># 数据结构</a>
           
         </div>
       
@@ -481,8 +471,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/12/04/String之intern函数/" rel="next" title="String之intern函数">
-                <i class="fa fa-chevron-left"></i> String之intern函数
+              <a href="/2018/01/03/Paxos算法/" rel="next" title="Paxos算法">
+                <i class="fa fa-chevron-left"></i> Paxos算法
               </a>
             
           </div>
@@ -490,10 +480,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/12/11/自定义线程池（二）/" rel="prev" title="自定义线程池（二）">
-                自定义线程池（二） <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -545,8 +531,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -635,6 +630,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-6"><a class="nav-link" href="#什么是B-Tree"><span class="nav-number">1.</span> <span class="nav-text">什么是B-Tree</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#数据库为什么要用B树"><span class="nav-number">2.</span> <span class="nav-text">数据库为什么要用B树</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
