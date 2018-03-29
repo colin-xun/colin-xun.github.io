@@ -81,35 +81,21 @@
 
 
 
-<meta name="description" content="我们看一些数据库索引文章的时候，避免不了会看到B-Tree或者B+Tree，那么什么是B-Tree呢？为什么数据库普遍喜欢这个数据结构呢？下面就从这两点说起 什么是B-TreeB树最早接触时在严蔚敏的数据结构中了解到的，那么我们根据一张图来看看她给出的定义   一颗m阶的B树，或为空树，或为满足一下特性的m叉树：  书中每一个节点至多有m颗子树； 若根节点不是叶子节点，则至少有两颗子树； 除根节点">
+<meta name="description" content="我们看一些数据库索引文章的时候，避免不了会看到B-Tree或者B+Tree，那么什么是B-Tree呢？为什么数据库普遍喜欢这个数据结构呢？下面就从这两点说起 什么是B-TreeB树最早接触时在严蔚敏的数据结构中了解到的，那么我们根据一张图来看看她给出的定义   从特性中我们看到：   B树是一个多叉树，而且是平衡树，关键字存放在整颗树中，性能等价于二分查找。 因为每个节点至少有M／2个儿子，所以可">
 <meta name="keywords" content="数据库,底层原理,数据结构">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据库索引之BTree">
 <meta property="og:url" content="http://yoursite.com/2018/03/29/数据库索引之BTree/index.html">
 <meta property="og:site_name" content="天秤座">
-<meta property="og:description" content="我们看一些数据库索引文章的时候，避免不了会看到B-Tree或者B+Tree，那么什么是B-Tree呢？为什么数据库普遍喜欢这个数据结构呢？下面就从这两点说起 什么是B-TreeB树最早接触时在严蔚敏的数据结构中了解到的，那么我们根据一张图来看看她给出的定义   一颗m阶的B树，或为空树，或为满足一下特性的m叉树：  书中每一个节点至多有m颗子树； 若根节点不是叶子节点，则至少有两颗子树； 除根节点">
+<meta property="og:description" content="我们看一些数据库索引文章的时候，避免不了会看到B-Tree或者B+Tree，那么什么是B-Tree呢？为什么数据库普遍喜欢这个数据结构呢？下面就从这两点说起 什么是B-TreeB树最早接触时在严蔚敏的数据结构中了解到的，那么我们根据一张图来看看她给出的定义   从特性中我们看到：   B树是一个多叉树，而且是平衡树，关键字存放在整颗树中，性能等价于二分查找。 因为每个节点至少有M／2个儿子，所以可">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2018/03/29/数据库索引之BTree/1.png">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=%28n%2CA_%7B0%7D+%2CK_%7B1%7D%2CA_%7B1%7D%2CK_%7B2%7D+%2CA_%7B2%7D%2C...%2CK_%7Bn%7D%2CA_%7Bn%7D%29">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=K_%7Bi%7D">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=i%3D1%2C...%2Cn">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=K_%7Bi%7D%3CK_%7Bi%2B1%7D">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=i%3D1%2C...%2Cn-1">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=A_%7Bi%7D">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=i%3D0%2C...%2Cn">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=A_%7Bi-1%7D">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=K_%7Bi%7D">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=i%3D1%2C...%2Cn">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=A_%7Bn%7D+">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=K_%7Bn%7D+">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=n">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=%5Clceil+m%2F2-1+%5Crceil+%5Cleq+n+%5Cleq+m-1">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=n%2B1">
+<meta property="og:image" content="http://yoursite.com/2018/03/29/数据库索引之BTree/3.png">
 <meta property="og:image" content="http://yoursite.com/2018/03/29/数据库索引之BTree/2.png">
-<meta property="og:updated_time" content="2018-03-29T11:33:54.000Z">
+<meta property="og:updated_time" content="2018-03-29T11:37:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据库索引之BTree">
-<meta name="twitter:description" content="我们看一些数据库索引文章的时候，避免不了会看到B-Tree或者B+Tree，那么什么是B-Tree呢？为什么数据库普遍喜欢这个数据结构呢？下面就从这两点说起 什么是B-TreeB树最早接触时在严蔚敏的数据结构中了解到的，那么我们根据一张图来看看她给出的定义   一颗m阶的B树，或为空树，或为满足一下特性的m叉树：  书中每一个节点至多有m颗子树； 若根节点不是叶子节点，则至少有两颗子树； 除根节点">
+<meta name="twitter:description" content="我们看一些数据库索引文章的时候，避免不了会看到B-Tree或者B+Tree，那么什么是B-Tree呢？为什么数据库普遍喜欢这个数据结构呢？下面就从这两点说起 什么是B-TreeB树最早接触时在严蔚敏的数据结构中了解到的，那么我们根据一张图来看看她给出的定义   从特性中我们看到：   B树是一个多叉树，而且是平衡树，关键字存放在整颗树中，性能等价于二分查找。 因为每个节点至少有M／2个儿子，所以可">
 <meta name="twitter:image" content="http://yoursite.com/2018/03/29/数据库索引之BTree/1.png">
 
 
@@ -375,16 +361,7 @@
         <p>我们看一些数据库索引文章的时候，避免不了会看到B-Tree或者B+Tree，那么什么是B-Tree呢？为什么数据库普遍喜欢这个数据结构呢？下面就从这两点说起</p>
 <h6 id="什么是B-Tree"><a href="#什么是B-Tree" class="headerlink" title="什么是B-Tree"></a>什么是B-Tree</h6><p>B树最早接触时在严蔚敏的数据结构中了解到的，那么我们根据一张图来看看她给出的定义</p>
 <img src="/2018/03/29/数据库索引之BTree/1.png">
-<blockquote>
-<p>一颗m阶的B树，或为空树，或为满足一下特性的m叉树：</p>
-<ol>
-<li>书中每一个节点至多有m颗子树；</li>
-<li>若根节点不是叶子节点，则至少有两颗子树；</li>
-<li>除根节点之外的所有非终端节点至少有【m/2】颗子树；</li>
-<li>所有的非终端节点中包含下列信息数据<img src="https://www.zhihu.com/equation?tex=%28n%2CA_%7B0%7D+%2CK_%7B1%7D%2CA_%7B1%7D%2CK_%7B2%7D+%2CA_%7B2%7D%2C...%2CK_%7Bn%7D%2CA_%7Bn%7D%29" alt="(n,A_{0} ,K_{1},A_{1},K_{2} ,A_{2},...,K_{n},A_{n})">，其中：<img src="https://www.zhihu.com/equation?tex=K_%7Bi%7D" alt="K_{i}">（<img src="https://www.zhihu.com/equation?tex=i%3D1%2C...%2Cn" alt="i=1,...,n">）为关键字，且<img src="https://www.zhihu.com/equation?tex=K_%7Bi%7D%3CK_%7Bi%2B1%7D" alt="K_{i}&lt;K_{i+1}">（<img src="https://www.zhihu.com/equation?tex=i%3D1%2C...%2Cn-1" alt="i=1,...,n-1">）；<img src="https://www.zhihu.com/equation?tex=A_%7Bi%7D" alt="A_{i}">（<img src="https://www.zhihu.com/equation?tex=i%3D0%2C...%2Cn" alt="i=0,...,n">）为指向子树根节点的指针，且指针<img src="https://www.zhihu.com/equation?tex=A_%7Bi-1%7D" alt="A_{i-1}">所指子树中的所有节点的关键字均小于<img src="https://www.zhihu.com/equation?tex=K_%7Bi%7D" alt="K_{i}">（<img src="https://www.zhihu.com/equation?tex=i%3D1%2C...%2Cn" alt="i=1,...,n">），<img src="https://www.zhihu.com/equation?tex=A_%7Bn%7D+" alt="A_{n} ">所指子树中所有节点的关键字均大于<img src="https://www.zhihu.com/equation?tex=K_%7Bn%7D+" alt="K_{n} ">，<img src="https://www.zhihu.com/equation?tex=n" alt="n">（<img src="https://www.zhihu.com/equation?tex=%5Clceil+m%2F2-1+%5Crceil+%5Cleq+n+%5Cleq+m-1" alt="\lceil m/2-1 \rceil \leq n \leq m-1">）为关键字的个数（或<img src="https://www.zhihu.com/equation?tex=n%2B1" alt="n+1">为子树个数）</li>
-<li>所有的叶子节点都出现在同一层次上，并且不带信息（可以看作是外部节点或查找失败的节点，实际上这些节点不存在，指向这些节点的指针为空）。</li>
-</ol>
-</blockquote>
+<img src="/2018/03/29/数据库索引之BTree/3.png">
 <p>从特性中我们看到：</p>
 <blockquote>
 <ol>
