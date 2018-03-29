@@ -89,7 +89,7 @@
 <meta property="og:site_name" content="天秤座">
 <meta property="og:description" content="我们看一些数据库索引文章的时候，避免不了会看到B-Tree或者B+Tree，那么什么是B-Tree呢？为什么数据库普遍喜欢这个数据结构呢？下面就从这两点说起 什么是B-TreeB树最早接触时在严蔚敏的数据结构中了解到的，那么我们根据一张图来看看她给出的定义   一颗m阶的B树，或为空树，或为满足一下特性的m叉树：  书中每一个节点至多有m颗子树； 若根节点不是叶子节点，则至少有两颗子树； 除根节点">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/Users/colin/Desktop/1.png">
+<meta property="og:image" content="http://yoursite.com/2018/03/29/数据库索引之BTree/1.png">
 <meta property="og:image" content="https://www.zhihu.com/equation?tex=%28n%2CA_%7B0%7D+%2CK_%7B1%7D%2CA_%7B1%7D%2CK_%7B2%7D+%2CA_%7B2%7D%2C...%2CK_%7Bn%7D%2CA_%7Bn%7D%29">
 <meta property="og:image" content="https://www.zhihu.com/equation?tex=K_%7Bi%7D">
 <meta property="og:image" content="https://www.zhihu.com/equation?tex=i%3D1%2C...%2Cn">
@@ -105,12 +105,12 @@
 <meta property="og:image" content="https://www.zhihu.com/equation?tex=n">
 <meta property="og:image" content="https://www.zhihu.com/equation?tex=%5Clceil+m%2F2-1+%5Crceil+%5Cleq+n+%5Cleq+m-1">
 <meta property="og:image" content="https://www.zhihu.com/equation?tex=n%2B1">
-<meta property="og:image" content="http://yoursite.com/Users/colin/Desktop/2.png">
-<meta property="og:updated_time" content="2018-03-29T11:12:30.000Z">
+<meta property="og:image" content="http://yoursite.com/2018/03/29/数据库索引之BTree/2.png">
+<meta property="og:updated_time" content="2018-03-29T11:16:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据库索引之BTree">
 <meta name="twitter:description" content="我们看一些数据库索引文章的时候，避免不了会看到B-Tree或者B+Tree，那么什么是B-Tree呢？为什么数据库普遍喜欢这个数据结构呢？下面就从这两点说起 什么是B-TreeB树最早接触时在严蔚敏的数据结构中了解到的，那么我们根据一张图来看看她给出的定义   一颗m阶的B树，或为空树，或为满足一下特性的m叉树：  书中每一个节点至多有m颗子树； 若根节点不是叶子节点，则至少有两颗子树； 除根节点">
-<meta name="twitter:image" content="http://yoursite.com/Users/colin/Desktop/1.png">
+<meta name="twitter:image" content="http://yoursite.com/2018/03/29/数据库索引之BTree/1.png">
 
 
 
@@ -374,7 +374,7 @@
       
         <p>我们看一些数据库索引文章的时候，避免不了会看到B-Tree或者B+Tree，那么什么是B-Tree呢？为什么数据库普遍喜欢这个数据结构呢？下面就从这两点说起</p>
 <h6 id="什么是B-Tree"><a href="#什么是B-Tree" class="headerlink" title="什么是B-Tree"></a>什么是B-Tree</h6><p>B树最早接触时在严蔚敏的数据结构中了解到的，那么我们根据一张图来看看她给出的定义</p>
-<p><img src="/Users/colin/Desktop/1.png" alt="1"></p>
+<img src="/2018/03/29/数据库索引之BTree/1.png">
 <blockquote>
 <p>一颗m阶的B树，或为空树，或为满足一下特性的m叉树：</p>
 <ol>
@@ -394,7 +394,7 @@
 </blockquote>
 <p>接下来我们聊聊B+树</p>
 <p>其实B+树的出现正是应文件系统所需才出现的一种数据结构，他是B树的变种，他的定义和B树有区别也有联系：</p>
-<p><img src="/Users/colin/Desktop/2.png" alt="2"></p>
+<img src="/2018/03/29/数据库索引之BTree/2.png">
 <blockquote>
 <ol>
 <li>有n颗子树的节点中含有n个关键字；</li>
