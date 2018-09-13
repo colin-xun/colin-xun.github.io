@@ -1,0 +1,11 @@
+1:新建一个md
+hexo n “文件名”
+
+2:生成html
+hexo g
+
+3:测试
+hexo s
+
+4:上传
+hexo d -g

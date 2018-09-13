@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java,多线程,线程池," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="天秤座" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="在我们自定义线程池之前，先预备一点前置知识  为什么要使用线程池？   New Thread这种方式性能差 缺乏统一管理，循环创建会照成OOM 功能单一  对应的就是线程池的优点，JAVA1.5出来的Concurrent包里面提供了四种创建线程池的方法，我们可以直接创建，但阿里Java开发手册有这么一条  【强制】线程池不允许使用 Executors 去创建，而是通过ThreadPoolExecu">
+<meta name="keywords" content="java,多线程,线程池">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自定义线程池（一）">
+<meta property="og:url" content="http://yoursite.com/2017/12/09/自定义线程池（一）/index.html">
+<meta property="og:site_name" content="天秤座">
+<meta property="og:description" content="在我们自定义线程池之前，先预备一点前置知识  为什么要使用线程池？   New Thread这种方式性能差 缺乏统一管理，循环创建会照成OOM 功能单一  对应的就是线程池的优点，JAVA1.5出来的Concurrent包里面提供了四种创建线程池的方法，我们可以直接创建，但阿里Java开发手册有这么一条  【强制】线程池不允许使用 Executors 去创建，而是通过ThreadPoolExecu">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2017/12/09/自定义线程池（一）/1.png">
+<meta property="og:updated_time" content="2018-09-13T08:19:06.343Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="自定义线程池（一）">
+<meta name="twitter:description" content="在我们自定义线程池之前，先预备一点前置知识  为什么要使用线程池？   New Thread这种方式性能差 缺乏统一管理，循环创建会照成OOM 功能单一  对应的就是线程池的优点，JAVA1.5出来的Concurrent包里面提供了四种创建线程池的方法，我们可以直接创建，但阿里Java开发手册有这么一条  【强制】线程池不允许使用 Executors 去创建，而是通过ThreadPoolExecu">
+<meta name="twitter:image" content="http://yoursite.com/2017/12/09/自定义线程池（一）/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/12/09/自定义线程池（一）/"/>
+
+
+
+
+
+  <title>自定义线程池（一） | 天秤座</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">天秤座</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">libra</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/09/自定义线程池（一）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="colin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="天秤座">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">自定义线程池（一）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-09T15:41:19+08:00">
+                2017-12-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java高级/" itemprop="url" rel="index">
+                    <span itemprop="name">java高级</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在我们自定义线程池之前，先预备一点前置知识</p>
+<ul>
+<li>为什么要使用线程池？</li>
+</ul>
+<ol>
+<li>New Thread这种方式性能差</li>
+<li>缺乏统一管理，循环创建会照成OOM</li>
+<li>功能单一</li>
+</ol>
+<p>对应的就是线程池的优点，JAVA1.5出来的Concurrent包里面提供了四种创建线程池的方法，我们可以直接创建，但阿里Java开发手册有这么一条</p>
+<blockquote>
+<p>【强制】线程池不允许使用 Executors 去创建，而是通过ThreadPoolExecutor 的方式</p>
+</blockquote>
+<p>这样的好处就强制开发者去了解线程池的创建原理，从而避免资源耗尽的风险，而且Executors中四种线程池创建方式其实都依赖于ThreadPollExecutor这个类的构造。</p>
+<ul>
+<li>线程池概念</li>
+</ul>
+<img src="/2017/12/09/自定义线程池（一）/1.png" title="关系图">
+<p>从图中可以看到各个类和接口的关系，同时可以看到Executors和其他类或接口没有什么直接关系，我们可以把他当成一个线程池工厂，用来创建四种线程池。</p>
+<p>先说下ThreadPoolExecutor</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">int</span> maximumPoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">long</span> keepAliveTime,</span></span></span><br><span class="line"><span class="function"><span class="params">        TimeUnit unit,</span></span></span><br><span class="line"><span class="function"><span class="params">        BlockingQueue&lt;Runnable&gt; workQueue,</span></span></span><br><span class="line"><span class="function"><span class="params">        ThreadFactory threadFactory,</span></span></span><br><span class="line"><span class="function"><span class="params">        RejectedExecutionHandler handler)</span></span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>corePoolSize：核心线程数大小</p>
+<p>maximumPoolSize：线程池最大线程数</p>
+<p>keepAliveTime：当线程数大于核心时，清除空闲keepAliveTime时间的线程</p>
+<p>unit：时间单位</p>
+<p>workQueue：存储等待任务的队列</p>
+<p>threadFactory：线程工厂</p>
+<p>handler：拒绝策略</p>
+</blockquote>
+<p>刚创建的线程池是没有任何线程的，当过来一个任务，就启动一个线程去执行，再过来一个还创建一个新的线程，即便之前的已经空闲了，当线程池达到核心线程数的话，如果没有空闲线程，就把新加进来的任务放到阻塞队列，如果阻塞队列是有边界的话，到达边界以后就会去创建新的线程，接下来就会出现两种情况：</p>
+<ol>
+<li>如果任务不再来了，那么就会把空闲keepAliveTime时间的线程给移除掉</li>
+<li>如果任务接着来，并且已经达到了最大线程数，那么就要执行拒绝策略了</li>
+</ol>
+<p>其中等待队列有多种ArrayBlockingQueue，LinkedBlockingQueue，LinkedBlockingDeque，SynchronousQueue，根据具体情况而定。</p>
+<p>拒绝策略也有很多种</p>
+<ol>
+<li>AbortPolicy：丢弃任务并抛出RejectedExecutionException异常。 (默认)</li>
+<li>DiscardPolicy：也是丢弃任务，但是不抛出异常。</li>
+<li>DiscardOldestPolicy：丢弃队列最前面的任务，然后重新尝试执行任务（重复此过程）</li>
+<li>CallerRunsPolicy：由调用线程处理该任务</li>
+</ol>
+<ul>
+<li>四种创建线程池的方法</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newSingleThreadExecutor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> FinalizableDelegatedExecutorService</span><br><span class="line">    	(<span class="keyword">new</span> ThreadPoolExecutor(</span><br><span class="line">            	<span class="number">1</span>, <span class="number">1</span>,</span><br><span class="line">        		<span class="number">0L</span>, TimeUnit.MILLISECONDS,</span><br><span class="line">                <span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;()));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>创建一个单线程，你看名字里面都没有ThreadPool:smile:，如果这个线程死了，他会创建一个新的线程来替代。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newCachedThreadPool</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ThreadPoolExecutor(</span><br><span class="line">                <span class="number">0</span>, Integer.MAX_VALUE,</span><br><span class="line">                <span class="number">60L</span>, TimeUnit.SECONDS,</span><br><span class="line">                <span class="keyword">new</span> SynchronousQueue&lt;Runnable&gt;());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这个线程的特点从等待队列就可以看出来，这个队列根本不存储数据，只是做一个通道，一边进一边出。最大线程数为Integer.MAX_VALUE,也就是过来一个任务我就创建一个线程，当线程数大于任务数的时候就去回收那些空闲超过60秒的线程。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newFixedThreadPool</span><span class="params">(<span class="keyword">int</span> nThreads)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> ThreadPoolExecutor(</span><br><span class="line">        	nThreads, nThreads,</span><br><span class="line">    		<span class="number">0L</span>, TimeUnit.MILLISECONDS,</span><br><span class="line">            <span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这个线程池核心线程和最大线程数相等，也就是说，过来一个任务，就直接创建一个线程，等到了最大线程数，你看keepAliveTime为0，所以就是不管线程使用不适用都不回收，如果线程挂了的话会重新创建一个。为了不然频繁丢弃任务，这里使用了一个无界链表队列。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ScheduledThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">super</span>(</span><br><span class="line">          corePoolSize, Integer.MAX_VALUE,</span><br><span class="line">          <span class="number">0</span>, NANOSECONDS,</span><br><span class="line">    	  <span class="keyword">new</span> DelayedWorkQueue());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这个线程池的特点从名字就可以看出来，定期线程池，也就是任务会定期执行，这个定期是在他调用schedule方法的时候，就像一个Timer定时器一样，而他的实现主要是靠DelayedWorkQueue这个延迟队列，他规定只有到达规定延迟时间以后才能获取里面的元素</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpeg" alt="colin 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpeg" alt="colin 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/多线程/" rel="tag"># 多线程</a>
+          
+            <a href="/tags/线程池/" rel="tag"># 线程池</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/04/String之intern函数/" rel="next" title="String之intern函数">
+                <i class="fa fa-chevron-left"></i> String之intern函数
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/11/自定义线程池（二）/" rel="prev" title="自定义线程池（二）">
+                自定义线程池（二） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">colin</p>
+              <p class="site-description motion-element" itemprop="description">生而为人，对不起</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/colin-xun" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/u/5059240656" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-globe"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.zhihu.com/people/wang-tong-xun-7/activities" target="_blank" title="知乎">
+                      
+                        <i class="fa fa-fw fa-globe"></i>知乎</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">colin</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+  <div class="footer-custom">Hosted by <a target="_blank" href="https://github.com/colin-xun">GitHub Pages</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
